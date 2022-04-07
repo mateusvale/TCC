@@ -18,6 +18,7 @@ export default class Login extends Component {
 
     state = { ...initialState }
 
+    //[1,0,0] = main form ; [0,1,0] = new account ; [0,0,1] = reset password form
     form = [1,0,0];
 
     updateField(event){
@@ -65,7 +66,40 @@ export default class Login extends Component {
         this.setState({ user })
     }
 
-    renderForm() {
+    sendNewAccount() {
+        const user = this.state.user;
+        axios['post'](baseUrl, user)
+            .then(resp => {
+                const list = this.getUpdatedList(resp.data);
+                this.setState({ user: initialState.user, list });
+            })
+    }
+
+    getUpdatedList(user, add = true){
+        //remover o user da lista
+        const list = this.state.list.filter(u => u.id !== user.id)
+        //se for para acrescentar:
+        if(add) 
+            //list.unshift(user)
+            list.push(user)
+        return list
+    }
+
+
+    // sendNewPassword() {
+    //     const user = this.state.user;
+    //     let list;
+    //     axios['get'](baseUrl)
+    //         .then(resp => {
+    //             list = resp.data;
+    //             const element = list.find(u => u.email === user.email)
+    //             if (element){
+
+    //             }
+    //         })
+    // }
+
+    renderMainForm() {
         return (
             this.form[0] === 1 ? 
                 <div className="form">
@@ -114,35 +148,33 @@ export default class Login extends Component {
         )
     }
 
-    renderNewAccount() {
+    renderNewAccountOrResetPassword() {
         return (
-            this.form[1] === 1 ?
+            this.form[0] === 0 ?
                 <div>
-                    <a className="col-12 d-flex justify-content-center"><strong>Criar nova conta</strong></a>
+                    <a className="col-12 d-flex justify-content-center">
+                        <strong>{this.form[1] === 1 ? 'Criar nova conta' : 'Reset de senha' }</strong></a>
                     <div className="col-12 col-md-6s">
                         <div className="form-group">
                             <label>Email</label>
                             <input type='text' className="form-control"
                                 name='email'
+                                value={this.state.user.email}
+                                onChange={e => this.updateField(e)}
                                 placeholder='Digite o email...' />
                         </div>
                         <div className="form-group">
                             <label>Senha</label>
                             <input type='text' className="form-control"
                                 name='password'
-                                placeholder='Digite a senha...' />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Repita a senha</label>
-                            <input type='text' className="form-control"
-                                name='password'
+                                value={this.state.user.password}
+                                onChange={e => this.updateField(e)}
                                 placeholder='Digite a senha...' />
                         </div>
 
                         <div className="col-12 d-flex justify-content-end">
-                            <button className="btn btn-primary">
-                                Criar
+                            <button className="btn btn-primary" onClick={this.form[1] === 1 ? () => this.sendNewAccount() : () => this.sendNewPassword()}>
+                                {this.form[1] === 1 ? 'Criar' : 'Enviar' }
                             </button>
                             <button className="btn btn-secondary ml-2" onClick={() => this.cancel()}>
                                 Cancelar
@@ -153,58 +185,14 @@ export default class Login extends Component {
             : null
         )
     }
-
-    renderNewPassword() {
-        return (
-            this.form[2] === 1 ?
-                <div>
-                    <a className="col-12 d-flex justify-content-center"><strong>Reset de senha</strong></a>
-                    <div className="col-12 col-md-6s">
-                        <div className="form-group">
-                            <label>Email</label>
-                            <input type='text' className="form-control"
-                                name='email'
-                                placeholder='Digite o email...' />
-                        </div>
-                        <div className="form-group">
-                            <label>Senha</label>
-                            <input type='text' className="form-control"
-                                name='password'
-                                placeholder='Digite a senha...' />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Repita a senha</label>
-                            <input type='text' className="form-control"
-                                name='password'
-                                placeholder='Digite a senha...' />
-                        </div>
-
-                        <div className="col-12 d-flex justify-content-end">
-                            <button className="btn btn-primary">
-                                Enviar
-                            </button>
-                            <button className="btn btn-secondary ml-2" onClick={() => this.cancel()}>
-                                Cancelar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            : null
-        )
-    }
-
 
     render() {
-       
         return (
             <Main {...headerProps}>
-                {this.renderForm()}
-                {this.renderNewAccount()}
-                {this.renderNewPassword()}
+                {this.renderMainForm()}
+                {this.renderNewAccountOrResetPassword()}
+                {/* {this.renderNewPassword()} */}
             </Main>
         )
     }
-
-
 }
