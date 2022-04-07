@@ -1,9 +1,14 @@
 {
   "users": [
     {
-      "name": "Rebeca Grassini",
       "email": "rebecagrassini@gmail.com",
+      "password": "123",
       "id": 2
+    },
+    {
+      "email": "mateusvalexandre@gmail.com",
+      "password": "123",
+      "id": 3
     }
   ]
 }

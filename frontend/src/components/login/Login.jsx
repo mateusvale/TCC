@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Main from "../template/Main";
-// import axios from 'axios';
+import axios from 'axios';
 
 const headerProps = {
     icon: 'home',
@@ -8,7 +8,42 @@ const headerProps = {
     subtitle: 'Login na plataforma'
 }
 
+const baseUrl = 'http://localhost:3001/users'
+const initialState = {
+    user: { email: '', password: '' },
+    list: []
+}
+
 export default class Login extends Component {
+
+    state = { ...initialState }
+
+    updateField(event){
+        const user = { ...this.state.user }
+        user[event.target.name] = event.target.value
+        this.setState({ user })
+    }
+
+    loginUser() {
+        const user = this.state.user;
+        //console.log(user)
+        axios['get'](baseUrl)
+            .then(resp => {
+                this.areCredentialsCorrect(user, resp.data)
+                //const list = resp.data;
+                // this.setState({ user: initialState.user, list });
+            })
+    }
+
+    areCredentialsCorrect(user, list) {
+        const element = list.find(u => u.email === user.email)
+        if (element){
+            const alertMessage = (user.password === element.password) ? "Login realizado" : "Senha errada"
+            alert(alertMessage)
+            return
+        }
+        alert('Usuário não existe!')
+    }
 
     renderForm() {
         return (
@@ -19,8 +54,8 @@ export default class Login extends Component {
                             <label>Email</label>
                             <input type='text' className="form-control"
                                 name='email'
-                                // value={this.state.user.name}
-                                // onChange={e => this.updateField(e)}
+                                value={this.state.user.email}
+                                onChange={e => this.updateField(e)}
                                 placeholder='Digite o email...' />
                         </div>
                     </div>
@@ -29,9 +64,9 @@ export default class Login extends Component {
                         <div className="form-group">
                             <label>Senha</label>
                             <input type='text' className="form-control"
-                                name='senha'
-                                //value={this.state.user.email}
-                                // onChange={e => this.updateField(e)}
+                                name='password'
+                                value={this.state.user.password}
+                                onChange={e => this.updateField(e)}
                                 placeholder='Digite a senha...' />
                         </div>
                     </div>
@@ -40,9 +75,9 @@ export default class Login extends Component {
                 <hr />
                 <div className="row">
                     <div className="col-12 d-flex justify-content-end">
-                        <button className="btn btn-primary">
-                            {/* onClick={e => this.save(e)}> */}
-                            Entrar
+                        <button className="btn btn-primary"
+                            onClick={e => this.loginUser(e)}>
+                            Login
                         </button>
 
                         <button className="btn btn-secondary ml-2">
