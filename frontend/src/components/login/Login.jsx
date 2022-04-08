@@ -40,9 +40,10 @@ export default class Login extends Component {
         if (element){
             const alertMessage = (user.password === element.password) ? "Login realizado" : "Senha errada"
             alert(alertMessage)
-            return
         }
-        alert('Usuário não existe!')
+        else
+            alert('Usuário não existe!');
+        this.clear();
     }
 
     showForms(num) {
@@ -115,7 +116,7 @@ export default class Login extends Component {
                         <div className="col-12 col-md-6">
                             <div className="form-group">
                                 <label>Senha</label>
-                                <input type='text' className="form-control"
+                                <input type='password' className="form-control"
                                     name='password'
                                     value={this.state.user.password}
                                     onChange={e => this.updateField(e)}
