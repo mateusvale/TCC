@@ -19,6 +19,16 @@
       "email": "celsovalexandre@gmail.com",
       "password": "123",
       "id": 5
+    },
+    {
+      "email": "cristinavalexandre@gmail.com",
+      "password": "321",
+      "id": 6
+    },
+    {
+      "email": "mateus@gmail.com",
+      "password": "11111",
+      "id": 7
     }
   ]
 }

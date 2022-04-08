@@ -3,7 +3,7 @@ import Main from "../template/Main";
 import axios from 'axios';
 
 const headerProps = {
-    icon: 'home',
+    icon: 'user-circle-o',
     title: 'Login',
     subtitle: 'Login na plataforma'
 }
@@ -48,8 +48,9 @@ export default class Login extends Component {
     showForms(num) {
         this.form = [0, 0, 0];
         this.form[num] = 1;
-        const user = { ...this.state.user }
-        this.setState({ user })
+        this.clear();
+        // const user = { ...this.state.user }
+        // this.setState({ user })
     }
 
     sendNewAccount() {
@@ -59,6 +60,8 @@ export default class Login extends Component {
                 const list = this.getUpdatedList(resp.data);
                 this.setState({ user: initialState.user, list });
             })
+        alert('Usuário criado com sucesso!');
+        this.showForms(0);
     }
 
     sendNewPassword() {
@@ -71,9 +74,12 @@ export default class Login extends Component {
                     const list = this.getUpdatedList(resp.data);
                     this.setState({ user: initialState.user, list });
                 })
+            alert('Senha resetada com sucesso!')
+            this.showForms(0);
             return
         }
         alert('Usuário não existe!')
+        this.clear();
     }
 
     getUpdatedList(user, add = true){
@@ -84,6 +90,10 @@ export default class Login extends Component {
             //list.unshift(user)
             list.push(user)
         return list
+    }
+
+    clear() {
+        this.setState({ user: initialState.user })
     }
 
     renderMainForm() {
