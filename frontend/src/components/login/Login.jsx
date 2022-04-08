@@ -18,6 +18,12 @@ export default class Login extends Component {
 
     state = { ...initialState }
 
+    componentWillMount() {
+        axios(baseUrl).then(resp => {
+            this.setState({ list: resp.data })
+        })
+    }
+
     //[1,0,0] = main form ; [0,1,0] = new account ; [0,0,1] = reset password form
     form = [1,0,0];
 
@@ -29,16 +35,7 @@ export default class Login extends Component {
 
     loginUser() {
         const user = this.state.user;
-        //console.log(user)
-        axios['get'](baseUrl)
-            .then(resp => {
-                this.areCredentialsCorrect(user, resp.data)
-                //const list = resp.data;
-                // this.setState({ user: initialState.user, list });
-            })
-    }
-
-    areCredentialsCorrect(user, list) {
+        const list = this.state.list;
         const element = list.find(u => u.email === user.email)
         if (element){
             const alertMessage = (user.password === element.password) ? "Login realizado" : "Senha errada"
@@ -48,20 +45,9 @@ export default class Login extends Component {
         alert('Usuário não existe!')
     }
 
-    newAccount() {
-        this.form = [0,1,0];
-        const user = { ...this.state.user }
-        this.setState({ user })
-    }
-
-    newPassword() {
-        this.form = [0,0,1];
-        const user = { ...this.state.user }
-        this.setState({ user })
-    }
-
-    cancel() {
-        this.form = [1,0,0];
+    showForms(num) {
+        this.form = [0, 0, 0];
+        this.form[num] = 1;
         const user = { ...this.state.user }
         this.setState({ user })
     }
@@ -75,6 +61,21 @@ export default class Login extends Component {
             })
     }
 
+    sendNewPassword() {
+        const user = this.state.user;
+        const list = this.state.list;
+        const element = list.find(u => u.email === user.email);
+        if (element){
+            axios['put'](`${baseUrl}/${element.id}`, user)
+                .then(resp => {
+                    const list = this.getUpdatedList(resp.data);
+                    this.setState({ user: initialState.user, list });
+                })
+            return
+        }
+        alert('Usuário não existe!')
+    }
+
     getUpdatedList(user, add = true){
         //remover o user da lista
         const list = this.state.list.filter(u => u.id !== user.id)
@@ -84,20 +85,6 @@ export default class Login extends Component {
             list.push(user)
         return list
     }
-
-
-    // sendNewPassword() {
-    //     const user = this.state.user;
-    //     let list;
-    //     axios['get'](baseUrl)
-    //         .then(resp => {
-    //             list = resp.data;
-    //             const element = list.find(u => u.email === user.email)
-    //             if (element){
-
-    //             }
-    //         })
-    // }
 
     renderMainForm() {
         return (
@@ -136,13 +123,13 @@ export default class Login extends Component {
                             </button>
 
                             <button className="btn btn-secondary ml-2"
-                                onClick={() => this.newPassword()}>
+                                onClick={() => this.showForms(2)}>
                                 Esqueceu a senha
                             </button>
 
                         </div>
                     </div>
-                    <a onClick={() => this.newAccount()}><strong>Criar conta</strong></a>
+                    <a onClick={() => this.showForms(1)}><strong>Criar conta</strong></a>
                 </div>
             : null
         )
@@ -176,7 +163,7 @@ export default class Login extends Component {
                             <button className="btn btn-primary" onClick={this.form[1] === 1 ? () => this.sendNewAccount() : () => this.sendNewPassword()}>
                                 {this.form[1] === 1 ? 'Criar' : 'Enviar' }
                             </button>
-                            <button className="btn btn-secondary ml-2" onClick={() => this.cancel()}>
+                            <button className="btn btn-secondary ml-2" onClick={() => this.showForms(0)}>
                                 Cancelar
                             </button>
                         </div>
@@ -191,7 +178,6 @@ export default class Login extends Component {
             <Main {...headerProps}>
                 {this.renderMainForm()}
                 {this.renderNewAccountOrResetPassword()}
-                {/* {this.renderNewPassword()} */}
             </Main>
         )
     }
