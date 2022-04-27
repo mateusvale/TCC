@@ -113,7 +113,13 @@ const center = {
 
 const key = process.env.REACT_APP_API_KEY
 
+const initialState = {
+  location: { lat: -3.745, lng: -38.523 }
+}
+
 export default class Map extends Component {
+
+  state = { ...initialState }
 
   constructor (props) {
     super(props)
@@ -132,7 +138,12 @@ export default class Map extends Component {
 
   onPlaceChanged () {
     if (this.autocomplete !== null) {
-      console.log(this.autocomplete.getPlace())
+      this.place = this.autocomplete.getPlace()
+      const location = { 
+        lat: this.place.geometry.location.lat(),
+        lng: this.place.geometry.location.lng()
+      }
+      this.setState({ location })
     } else {
       console.log('Autocomplete is not loaded yet!')
     }
@@ -145,15 +156,15 @@ export default class Map extends Component {
     return (
       <Main {...headerProps}>
         <div className="">
-          <LoadScript googleMapsApiKey={key} libraries={["places"]}>
+          <LoadScript googleMapsApiKey={ key } libraries={["places"]}>
             <GoogleMap 
               mapContainerStyle={containerStyle}
-              center={center}
+              center={this.state.location}
               zoom={10}
             >
               {/* <Marker onLoad={this.onLoad} position={center}/> */}
-              <Marker position={center}/>
-              <Autocomplete
+              <Marker position={ this.state.location }/>
+              <Autocomplete fields={["formatted_address", "geometry", "name"]} types={["establishment"]}
                   onLoad={this.onLoad}
                   onPlaceChanged={this.onPlaceChanged}>
                   <input
@@ -172,12 +183,33 @@ export default class Map extends Component {
                       textOverflow: `ellipses`,
                       position: "absolute",
                       left: "50%",
-                      marginLeft: "-120px"
+                      marginLeft: "-120px",
+                      marginTop: '10px'
                     }}
                   />
               </Autocomplete>
             </GoogleMap>
           </LoadScript>
+          <div>
+              <div className="text-center mt-2">
+                  <div className="form-group">
+                      <label>Clique para habilitar o mapa e em seguida escolha o ponto onde gostaria de mostrar sua propaganda</label>
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-sm">
+                            <button>Habilitar</button>
+                          </div>
+                          <div class="col-sm">
+                            <button>Utilizar marcador como ponto</button>
+                          </div>
+                          <div class="col-sm">
+                            <button>Reset</button>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
         </div>
       </Main>
     )
