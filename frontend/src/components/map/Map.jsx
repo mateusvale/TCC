@@ -106,20 +106,18 @@ const containerStyle = {
   height: '400px'
 };
 
-const center = {
-  lat: -3.745,
-  lng: -38.523
-};
-
 const key = process.env.REACT_APP_API_KEY
 
 const initialState = {
-  location: { lat: -3.745, lng: -38.523 }
+  location: { lat: -3.745, lng: -38.523 },
+  markerLocation: {}
 }
 
 export default class Map extends Component {
 
   state = { ...initialState }
+
+  circleMarker = [0,0]
 
   constructor (props) {
     super(props)
@@ -148,6 +146,17 @@ export default class Map extends Component {
       console.log('Autocomplete is not loaded yet!')
     }
   }
+
+  onClick(event){
+    console.log(event.latLng.lat())
+    console.log(event.latLng.lng())
+    const markerLocation = {
+      lat: event.latLng.lat(),
+      lng: event.latLng.lng()
+    } 
+    this.setState({ markerLocation })
+  }
+
   // onLoad = marker => {
   //   console.log('marker: ', marker)
   // }
@@ -161,9 +170,10 @@ export default class Map extends Component {
               mapContainerStyle={containerStyle}
               center={this.state.location}
               zoom={10}
+              onClick={e => this.onClick(e)}
             >
               {/* <Marker onLoad={this.onLoad} position={center}/> */}
-              <Marker position={ this.state.location }/>
+              <Marker position={ this.state.markerLocation }/>
               <Autocomplete fields={["formatted_address", "geometry", "name"]} types={["establishment"]}
                   onLoad={this.onLoad}
                   onPlaceChanged={this.onPlaceChanged}>
@@ -194,15 +204,15 @@ export default class Map extends Component {
               <div className="text-center mt-2">
                   <div className="form-group">
                       <label>Clique para habilitar o mapa e em seguida escolha o ponto onde gostaria de mostrar sua propaganda</label>
-                      <div class="container">
-                        <div class="row">
-                          <div class="col-sm">
+                      <div className="container">
+                        <div className="row">
+                          <div className="col-sm">
                             <button>Habilitar</button>
                           </div>
-                          <div class="col-sm">
+                          <div className="col-sm">
                             <button>Utilizar marcador como ponto</button>
                           </div>
-                          <div class="col-sm">
+                          <div className="col-sm">
                             <button>Reset</button>
                           </div>
                         </div>
