@@ -20,6 +20,8 @@ const initialState = {
   centerLocation: { lat: -3.745, lng: -38.523 },
   circleLocation: {},
   isCircleVisible: false,
+  disableButtons: false,
+  radiusCircle: 30000
 }
 
 export default class Map extends Component {
@@ -62,8 +64,9 @@ export default class Map extends Component {
       const circleLocation = {
         lat: event.latLng.lat(),
         lng: event.latLng.lng()
-      } 
-      this.setState({ circleLocation, isCircleVisible: true })
+      }
+      this.enableCircleByClick = false 
+      this.setState({ circleLocation, isCircleVisible: true, disableButtons: false })
     }
   }
 
@@ -77,25 +80,34 @@ export default class Map extends Component {
     draggable: false,
     editable: false,
     visible: true,
-    radius: 30000,
+    radius: this.state.radiusCircle,
     zIndex: 1
   }
 
   enableClickForCircle() {
     this.enableCircleByClick = true
-    // this.setState({ isCircleVisible: true })
+    this.setState({ disableButtons: true })
     // this.circleIsVisible = true;
   }
 
   enableAutocompleteForCircle() {
     this.enableCircleByClick = false
     const circleLocation = this.state.centerLocation
-    this.setState({ isCircleVisible: true, circleLocation })
+    this.setState({ isCircleVisible: true, circleLocation, disableButtons: true })
   }
 
   resetCircle(){
     this.enableCircleByClick = false
-    this.setState({ isCircleVisible: false, circleLocation : {}  })
+    this.setState({ isCircleVisible: false, circleLocation : {}, disableButtons: false  })
+  }
+
+  resizeCircle(operator){
+    if (operator === '+'){
+      this.state.radiusCircle += 100
+      this.options.radius = this.state.radiusCircle
+    }
+    else
+      this.state.radiusCircle -= 100
   }
 
   // onLoad = marker => {
@@ -142,25 +154,22 @@ export default class Map extends Component {
               </Autocomplete>
             </GoogleMap>
           </LoadScript>
-          <div>
-              <div className="text-center mt-2">
-                  <div className="form-group">
-                      <label>Clique para habilitar o mapa e em seguida escolha o ponto onde gostaria de mostrar sua propaganda</label>
-                      <div className="container">
-                        <div className="row">
-                          <div className="col-sm">
-                            <button className="btn btn-primary" disabled={ this.state.isCircleVisible } onClick={ e => this.enableClickForCircle(0) } >Habilitar</button>
-                          </div>
-                          <div className="col-sm">
-                            <button className="btn btn-primary" disabled={ this.state.isCircleVisible } onClick={ e => this.enableAutocompleteForCircle(1) } >Utilizar marcador como ponto</button>
-                          </div>
-                          <div className="col-sm">
-                            <button className="btn btn-primary" onClick={ e => this.resetCircle() } >Reset</button>
-                          </div>
-                        </div>
-                      </div>
-                  </div>
+          <div className="row bg-light mt-2 ml-1 mr-1">
+            <div>
+              <label className="ml-5" >Habilite o mapa e escolha o ponto onde mostrará sua propaganda ou utilize o marcador como ponto.</label>
+              <div className="d-flex justify-content-center" >
+                <button className="btn btn-primary mr-1" disabled={ this.state.disableButtons } onClick={ e => this.enableClickForCircle(0) }>Habilitar</button>
+                <button className="btn btn-primary" disabled={ this.state.disableButtons } onClick={ e => this.enableAutocompleteForCircle(1) } >Utilizar marcador como ponto</button>
+                <button className="btn btn-light ml-1" onClick={ e => this.resetCircle() } >Reset</button>
               </div>
+            </div>
+            <div>
+              <label className="ml-5" >Aumente ou diminua o tamanho do raio do círculo.</label>
+              <div className="d-flex justify-content-center" >
+                <button className="btn btn-outline-danger mr-1" onClick={e => this.state.radiusCircle('-')}>-</button>
+                <button className="btn btn-outline-success" onClick={e => this.state.radiusCircle('+')} >+</button>
+              </div>
+            </div>
           </div>
         </div>
       </Main>
