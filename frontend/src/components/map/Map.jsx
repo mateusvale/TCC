@@ -1,97 +1,5 @@
-// import React, { Component } from "react";
-// import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-// import Main from "../template/Main";
-// // import axios from 'axios';
-
-// const headerProps = {
-//     icon: 'map-marker',
-//     title: 'Mapa',
-//     subtitle: 'Cadastre o ponto no mapa onde gostaria de apresentar sua propaganda.'
-// }
-
-// export default class Map extends Component {
-
-//     render() {
-//         return (
-//             <Main {...headerProps}>
-//             </Main>
-//         )
-//     }
-
-// }
-
-
-
-
-
-
-
-
-// import React, { Component } from "react";
-// import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-// import Main from "../template/Main";
-// // // import axios from 'axios';
-
-
-// const headerProps = {
-//     icon: 'map-marker',
-//     title: 'Mapa',
-//     subtitle: 'Cadastre o ponto no mapa onde gostaria de apresentar sua propaganda.'
-// }
-
-// const containerStyle = {
-//   width: '400px',
-//   height: '400px'
-// };
-
-// const center = {
-//   lat: -22.940816,
-//   lng: -43.342566
-// };
-
-// const key = process.env.REACT_APP_API_KEY
-
-// function MyComponent() {
-//   const { isLoaded } = useJsApiLoader({
-//     id: 'google-map-script',
-//     googleMapsApiKey: key
-//   })
-
-//   const [map, setMap] = React.useState(null)
-
-//   const onLoad = React.useCallback(function callback(map) {
-//     const bounds = new window.google.maps.LatLngBounds();
-//     map.fitBounds(bounds);
-//     setMap(map)
-//   }, [])
-
-//   const onUnmount = React.useCallback(function callback(map) {
-//     setMap(null)
-//   }, [])
-
-//   return isLoaded ? (
-//     <Main {...headerProps}>
-//       <GoogleMap
-//         mapContainerStyle={containerStyle}
-//         center={center}
-//         zoom={10}
-//         onLoad={onLoad}
-//         onUnmount={onUnmount}
-//       >
-//         { /* Child components, such as markers, info windows, etc. */ }
-//         <></>
-//       </GoogleMap>
-//     </Main>
-//   ) : <></>
-// }
-
-// export default React.memo(MyComponent)
-
-
-
-
 import React, { Component } from "react";
-import { GoogleMap, LoadScript, Marker, Autocomplete } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker, Autocomplete, Circle } from '@react-google-maps/api';
 import Main from "../template/Main";
 // // import axios from 'axios';
 
@@ -109,15 +17,16 @@ const containerStyle = {
 const key = process.env.REACT_APP_API_KEY
 
 const initialState = {
-  location: { lat: -3.745, lng: -38.523 },
-  markerLocation: {}
+  centerLocation: { lat: -3.745, lng: -38.523 },
+  circleLocation: {},
+  isCircleVisible: false,
 }
 
 export default class Map extends Component {
 
   state = { ...initialState }
 
-  circleMarker = [0,0]
+  enableCircleByClick = false
 
   constructor (props) {
     super(props)
@@ -137,24 +46,56 @@ export default class Map extends Component {
   onPlaceChanged () {
     if (this.autocomplete !== null) {
       this.place = this.autocomplete.getPlace()
-      const location = { 
+      const centerLocation = { 
         lat: this.place.geometry.location.lat(),
         lng: this.place.geometry.location.lng()
       }
-      this.setState({ location })
+      this.setState({ centerLocation })
     } else {
       console.log('Autocomplete is not loaded yet!')
     }
   }
 
   onClick(event){
-    console.log(event.latLng.lat())
-    console.log(event.latLng.lng())
-    const markerLocation = {
-      lat: event.latLng.lat(),
-      lng: event.latLng.lng()
-    } 
-    this.setState({ markerLocation })
+    console.log(this.enableCircleByClick)
+    if (this.enableCircleByClick){
+      const circleLocation = {
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng()
+      } 
+      this.setState({ circleLocation, isCircleVisible: true })
+    }
+  }
+
+  options = {
+    strokeColor: '#FF0000',
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: '#FF0000',
+    fillOpacity: 0.35,
+    clickable: false,
+    draggable: false,
+    editable: false,
+    visible: true,
+    radius: 30000,
+    zIndex: 1
+  }
+
+  enableClickForCircle() {
+    this.enableCircleByClick = true
+    // this.setState({ isCircleVisible: true })
+    // this.circleIsVisible = true;
+  }
+
+  enableAutocompleteForCircle() {
+    this.enableCircleByClick = false
+    const circleLocation = this.state.centerLocation
+    this.setState({ isCircleVisible: true, circleLocation })
+  }
+
+  resetCircle(){
+    this.enableCircleByClick = false
+    this.setState({ isCircleVisible: false, circleLocation : {}  })
   }
 
   // onLoad = marker => {
@@ -168,12 +109,13 @@ export default class Map extends Component {
           <LoadScript googleMapsApiKey={ key } libraries={["places"]}>
             <GoogleMap 
               mapContainerStyle={containerStyle}
-              center={this.state.location}
+              center={this.state.centerLocation}
               zoom={10}
               onClick={e => this.onClick(e)}
             >
               {/* <Marker onLoad={this.onLoad} position={center}/> */}
-              <Marker position={ this.state.markerLocation }/>
+              <Marker position={ this.state.centerLocation }/>
+              <Circle options={ this.options } center={ this.state.circleLocation } visible={ this.state.isCircleVisible }/>
               <Autocomplete fields={["formatted_address", "geometry", "name"]} types={["establishment"]}
                   onLoad={this.onLoad}
                   onPlaceChanged={this.onPlaceChanged}>
@@ -207,13 +149,13 @@ export default class Map extends Component {
                       <div className="container">
                         <div className="row">
                           <div className="col-sm">
-                            <button>Habilitar</button>
+                            <button className="btn btn-primary" disabled={ this.state.isCircleVisible } onClick={ e => this.enableClickForCircle(0) } >Habilitar</button>
                           </div>
                           <div className="col-sm">
-                            <button>Utilizar marcador como ponto</button>
+                            <button className="btn btn-primary" disabled={ this.state.isCircleVisible } onClick={ e => this.enableAutocompleteForCircle(1) } >Utilizar marcador como ponto</button>
                           </div>
                           <div className="col-sm">
-                            <button>Reset</button>
+                            <button className="btn btn-primary" onClick={ e => this.resetCircle() } >Reset</button>
                           </div>
                         </div>
                       </div>
