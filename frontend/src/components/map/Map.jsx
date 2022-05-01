@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { GoogleMap, LoadScript, Marker, Autocomplete, Circle } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker, Autocomplete, Circle, useGoogleMap } from '@react-google-maps/api';
 import Main from "../template/Main";
 // // import axios from 'axios';
 
@@ -19,6 +19,7 @@ const key = process.env.REACT_APP_API_KEY
 const initialState = {
   centerLocation: { lat: -22.940581374458727, lng: -43.34338301801839 },
   circleLocation: {},
+  map: {},
   isCircleVisible: false,
   isMarkerVisible: false,
   disableButtons: false,
@@ -31,6 +32,19 @@ export default class Map extends Component {
 
   enableCircleByClick = false
 
+  count = 0
+
+  // map = useGoogleMap()
+
+  boundsCallBack = () => {
+    const {map} = this.state;
+    console.log('map: ', map)
+}
+
+  handleMapLoad = (map) => {
+      this.setState((state) => ({ ...state, map }));
+  }
+
   constructor (props) {
     super(props)
 
@@ -41,7 +55,7 @@ export default class Map extends Component {
   }
 
   onLoad (autocomplete) {
-    console.log('autocomplete: ', autocomplete)
+    //console.log('autocomplete: ', autocomplete)
 
     this.autocomplete = autocomplete
   }
@@ -60,6 +74,7 @@ export default class Map extends Component {
   }
 
   onClick(event){
+    console.log(this.state.map)
     if (this.enableCircleByClick){
       const circleLocation = {
         lat: event.latLng.lat(),
@@ -67,6 +82,7 @@ export default class Map extends Component {
       }
       this.enableCircleByClick = false 
       this.setState({ circleLocation, isCircleVisible: true, disableButtons: false })
+      this.insertMarks()
     }
   }
 
@@ -115,12 +131,57 @@ export default class Map extends Component {
     this.setState({ isMarkerVisible })
   }
 
+  insertMarks(){
+    const google = window.google
+    let request = {
+      location: this.state.circleLocation,
+      radius: this.state.radiusCircle,
+      type: ['transit_station'],
+      }
+      const service = new google.maps.places.PlacesService(this.state.map);
+      service.nearbySearch(request, this.callback);
+  }
+
+  callback(results, status, pagination) {
+    const google = window.google
+    pagination.nextPage();  //will load 40 more results. Can be searched only 60 differents bus stations.
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+      for (let i = 0; i < results.length; i++) {
+  
+        //this.count ++;
+        let info = {
+          id: results[i].place_id,
+          name: results[i].name,
+          coordinates: {lat: results[i].geometry.location.lat(), lng: results[i].geometry.location.lng() }
+        }
+        
+        console.log(info);
+
+        // marker = new google.maps.Marker({
+        //   map: map,
+        //   position: info.coordinates,
+        //   label: count.toString()
+        // });
+
+
+        // markers.push(marker);
+      }
+    }
+    // let establishment = typeOfPlaces.filter(element => element.original == typeOfPlacesDropdown.value);
+    // numOfplaces.textContent = (count < 60) ? `Número de ${establishment[0].translated}: ${count}` : `Número de ${establishment[0].translated}: ${count}+`;
+}
+
+  
+
   render() {
     return (
       <Main {...headerProps}>
         <div className="">
-          <LoadScript googleMapsApiKey={ key } libraries={["places"]}>
+          <LoadScript googleMapsApiKey={ true } libraries={["places"]}>
+          {/* <LoadScript googleMapsApiKey={ key } libraries={["places"]}> */}
             <GoogleMap 
+              onDragEnd={this.boundsCallBack}
+              onLoad={this.handleMapLoad}
               mapContainerStyle={containerStyle}
               center={this.state.centerLocation}
               zoom={15}
@@ -180,9 +241,32 @@ export default class Map extends Component {
               </div>
             </div>
           </div>
-          <div className="row bg-light mt-2 ml-1 mr-1" >
-                    Opcional:
+
+          <div className="row  bg-light  mt-2 ml-1 mr-1">
+            <div className="col-sm-4 align-self-center">Opcional: mostrar estabelecimentos no mapa</div>
+            <div className="col-sm-8">
+              <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Sem valor
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="#">Action</a>
+                  <a class="dropdown-item" href="#">Another action</a>
+                  <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+                <button className="ml-1 mr-1 btn btn-primary">Inserir marcações</button>
+                <button className="btn btn-secondary">Apagar marcações</button>
+              </div>
+            </div>
           </div>
+          {/* <div className="row bg-light mt-2 ml-1 mr-1" >
+            <label className="row align-self-center" >Opcional: mostrar estabelecimentos no mapa</label>
+            <select id="buslines-dropdown">
+              <option value='noValue'>Sem valor</option>
+            </select>
+            <button>Inserir marcações</button>
+            <button>Apagar marcações</button>
+          </div> */}
         </div>
       </Main>
     )
