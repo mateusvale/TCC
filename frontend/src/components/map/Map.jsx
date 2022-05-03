@@ -23,7 +23,8 @@ const initialState = {
   isCircleVisible: false,
   isMarkerVisible: false,
   disableButtons: false,
-  radiusCircle: 1000
+  radiusCircle: 1000,
+  selectValue: "noValue"
 }
 
 export default class Map extends Component {
@@ -169,16 +170,117 @@ export default class Map extends Component {
     }
     // let establishment = typeOfPlaces.filter(element => element.original == typeOfPlacesDropdown.value);
     // numOfplaces.textContent = (count < 60) ? `Número de ${establishment[0].translated}: ${count}` : `Número de ${establishment[0].translated}: ${count}+`;
-}
+  } 
 
-  
+  typeOfPlaces = [
+  { original: 	'accounting',	translated: 	'Contabilidade' },
+  { original: 	'airport',	translated: 	'Aeroporto' },
+  { original: 	'amusement_park',	translated: 	'Parque De Diversões' },
+  { original: 	'aquarium',	translated: 	'Aquário' },
+  { original: 	'art_gallery',	translated: 	'Galeria De Arte' },
+  { original: 	'atm',	translated: 	'Caixa Eletrônico' },
+  { original: 	'bakery',	translated: 	'Padaria' },
+  { original: 	'bank',	translated: 	'Banco' },
+  { original: 	'bar',	translated: 	'Bar' },
+  { original: 	'beauty_salon',	translated: 	'Salão De Beleza' },
+  { original: 	'bicycle_store',	translated: 	'Bicicletário' },
+  { original: 	'book_store',	translated: 	'Livraria' },
+  { original: 	'bowling_alley',	translated: 	'Boliche' },
+  { original: 	'bus_station',	translated: 	'Estação De Onibus' },
+  { original: 	'cafe',	translated: 	'Cafeteria' },
+  { original: 	'campground',	translated: 	'Área De Camping' },
+  { original: 	'car_dealer',	translated: 	'Vendedor De Carros' },
+  { original: 	'car_rental',	translated: 	'Aluguel De Carros' },
+  { original: 	'car_repair',	translated: 	'Reparo De Carros' },
+  { original: 	'car_wash',	translated: 	'Lava-Jato' },
+  { original: 	'casino',	translated: 	'Cassino' },
+  { original: 	'cemetery',	translated: 	'Cemitério' },
+  { original: 	'church',	translated: 	'Igreja' },
+  { original: 	'city_hall',	translated: 	'Câmara Municipal' },
+  { original: 	'clothing_store',	translated: 	'Loja De Roupas' },
+  { original: 	'convenience_store',	translated: 	'Loja De Conveniência' },
+  { original: 	'courthouse',	translated: 	'Tribunal' },
+  { original: 	'dentist',	translated: 	'Dentista' },
+  { original: 	'department_store',	translated: 	'Loja De Departamento' },
+  { original: 	'doctor',	translated: 	'Consultório Médico' },
+  { original: 	'drugstore',	translated: 	'Drogaria' },
+  { original: 	'electrician',	translated: 	'Eletricista' },
+  { original: 	'electronics_store',	translated: 	'Loja De Eletrônicos' },
+  { original: 	'embassy',	translated: 	'Embaixada' },
+  { original: 	'fire_station',	translated: 	'Corpo De Bombeiros' },
+  { original: 	'florist',	translated: 	'Florista' },
+  { original: 	'funeral_home',	translated: 	'Funerária' },
+  { original: 	'furniture_store',	translated: 	'Loja De Móveis' },
+  { original: 	'gas_station',	translated: 	'Posto De Gasolina' },
+  { original: 	'gym',	translated: 	'Academia' },
+  { original: 	'hair_care',	translated: 	'Cabelereiro' },
+  { original: 	'hardware_store',	translated: 	'Loja De Hardware' },
+  { original: 	'hindu_temple',	translated: 	'Templo Hindu' },
+  { original: 	'home_goods_store',	translated: 	'Loja De Artigos Para Casa' },
+  { original: 	'hospital',	translated: 	'Hospital' },
+  { original: 	'insurance_agency',	translated: 	'Agência De Seguros' },
+  { original: 	'jewelry_store',	translated: 	'Joalheria' },
+  { original: 	'laundry',	translated: 	'Lavanderia' },
+  { original: 	'lawyer',	translated: 	'Advogado' },
+  { original: 	'library',	translated: 	'Biblioteca' },
+  { original: 	'light_rail_station',	translated: 	'Estação De Trilhos Leves' },
+  { original: 	'liquor_store',	translated: 	'Loja De Bebidas' },
+  { original: 	'local_government_office',	translated: 	'Escritório Do Governo Local' },
+  { original: 	'locksmith',	translated: 	'Chaveiro' },
+  { original: 	'lodging',	translated: 	'Alojamento' },
+  { original: 	'meal_delivery',	translated: 	'Delivery De Comida' },
+  { original: 	'meal_takeaway',	translated: 	'Local De Resgate De Comida' },
+  { original: 	'mosque',	translated: 	'Mesquita' },
+  { original: 	'movie_rental',	translated: 	'Aluguel De Filme' },
+  { original: 	'movie_theater',	translated: 	'Cinema' },
+  { original: 	'moving_company',	translated: 	'Empresa De Mudança' },
+  { original: 	'museum',	translated: 	'Museu' },
+  { original: 	'night_club',	translated: 	'Boate' },
+  { original: 	'painter',	translated: 	'Pintor' },
+  { original: 	'park',	translated: 	'Parque' },
+  { original: 	'parking',	translated: 	'Estacionamento' },
+  { original: 	'pet_store',	translated: 	'Loja De Animais' },
+  { original: 	'pharmacy',	translated: 	'Farmacia' },
+  { original: 	'physiotherapist',	translated: 	'Fisioterapeuta' },
+  { original: 	'plumber',	translated: 	'Encanador' },
+  { original: 	'police',	translated: 	'Polícia' },
+  { original: 	'post_office',	translated: 	'Correios' },
+  { original: 	'primary_school',	translated: 	'Escola Primaria' },
+  { original: 	'real_estate_agency',	translated: 	'Agência Imobiliária' },
+  { original: 	'restaurant',	translated: 	'Restaurante' },
+  { original: 	'roofing_contractor',	translated: 	'Empreiteiro De Telhados' },
+  { original: 	'rv_park',	translated: 	'Rv_Park' },
+  { original: 	'school',	translated: 	'Escola' },
+  { original: 	'secondary_school',	translated: 	'Ensino Médio' },
+  { original: 	'shoe_store',	translated: 	'Loja De Sapatos' },
+  { original: 	'shopping_mall',	translated: 	'Centro De Compras' },
+  { original: 	'spa',	translated: 	'Spa' },
+  { original: 	'stadium',	translated: 	'Estádio' },
+  { original: 	'storage',	translated: 	'Local De Armazenamento' },
+  { original: 	'store',	translated: 	'Loja' },
+  { original: 	'subway_station',	translated: 	'Estação De Metrô' },
+  { original: 	'supermarket',	translated: 	'Supermercado' },
+  { original: 	'synagogue',	translated: 	'Sinagoga' },
+  { original: 	'taxi_stand',	translated: 	'Ponto De Taxi' },
+  { original: 	'tourist_attraction',	translated: 	'Atração Turística' },
+  { original: 	'train_station',	translated: 	'Estação De Trem' },
+  { original: 	'transit_station',	translated: 	'Ponto De Ônibus' },
+  { original: 	'travel_agency',	translated: 	'Agência De Viagens' },
+  { original: 	'university',	translated: 	'Universidade' },
+  { original: 	'veterinary_care',	translated: 	'Veterinário' },
+  { original: 	'zoo',	translated: 	'Jardim Zoológico' },
+  ];
+
+  insertEstablishMarks(){
+
+  }
 
   render() {
     return (
       <Main {...headerProps}>
         <div className="">
-          <LoadScript googleMapsApiKey={ true } libraries={["places"]}>
-          {/* <LoadScript googleMapsApiKey={ key } libraries={["places"]}> */}
+          {/* <LoadScript googleMapsApiKey={ true } libraries={["places"]}> */}
+          <LoadScript googleMapsApiKey={ key } libraries={["places"]}>
             <GoogleMap 
               onDragEnd={this.boundsCallBack}
               onLoad={this.handleMapLoad}
@@ -241,32 +343,19 @@ export default class Map extends Component {
               </div>
             </div>
           </div>
-
           <div className="row  bg-light  mt-2 ml-1 mr-1">
             <div className="col-sm-4 align-self-center">Opcional: mostrar estabelecimentos no mapa</div>
             <div className="col-sm-8">
-              <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Sem valor
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#">Action</a>
-                  <a class="dropdown-item" href="#">Another action</a>
-                  <a class="dropdown-item" href="#">Something else here</a>
-                </div>
+                <select className="align-self-center">
+                  <option  value='noValue'>Sem valor</option>
+                  {this.typeOfPlaces.map((place, index) => {
+                    return <option key={index} value={place.original}>{place.translated}</option>
+                  })}
+                </select>
                 <button className="ml-1 mr-1 btn btn-primary">Inserir marcações</button>
                 <button className="btn btn-secondary">Apagar marcações</button>
-              </div>
             </div>
           </div>
-          {/* <div className="row bg-light mt-2 ml-1 mr-1" >
-            <label className="row align-self-center" >Opcional: mostrar estabelecimentos no mapa</label>
-            <select id="buslines-dropdown">
-              <option value='noValue'>Sem valor</option>
-            </select>
-            <button>Inserir marcações</button>
-            <button>Apagar marcações</button>
-          </div> */}
         </div>
       </Main>
     )
