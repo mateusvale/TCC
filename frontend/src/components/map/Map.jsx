@@ -83,7 +83,7 @@ export default class Map extends Component {
       }
       this.enableCircleByClick = false 
       this.setState({ circleLocation, isCircleVisible: true, disableButtons: false })
-      this.insertMarks()
+      // this.insertPlacesMarks()
     }
   }
 
@@ -132,7 +132,7 @@ export default class Map extends Component {
     this.setState({ isMarkerVisible })
   }
 
-  insertMarks(){
+  insertPlacesMarks(){
     const google = window.google
     let request = {
       location: this.state.circleLocation,
@@ -271,9 +271,10 @@ export default class Map extends Component {
   { original: 	'zoo',	translated: 	'Jardim Zoológico' },
   ];
 
-  insertEstablishMarks(){
-
+  handleChange(event){
+    this.setState({ selectValue: event.target.value })
   }
+
 
   render() {
     return (
@@ -346,13 +347,13 @@ export default class Map extends Component {
           <div className="row  bg-light  mt-2 ml-1 mr-1">
             <div className="col-sm-4 align-self-center">Opcional: mostrar estabelecimentos no mapa</div>
             <div className="col-sm-8">
-                <select className="align-self-center">
-                  <option  value='noValue'>Sem valor</option>
+                <select value={this.state.selectValue} onChange={e => this.handleChange(e)} className="align-self-center">
+                  <option value='noValue'>Sem valor</option>
                   {this.typeOfPlaces.map((place, index) => {
                     return <option key={index} value={place.original}>{place.translated}</option>
                   })}
                 </select>
-                <button className="ml-1 mr-1 btn btn-primary">Inserir marcações</button>
+                <button onClick={e => this.insertPlacesMarks()} className="ml-1 mr-1 btn btn-primary">Inserir marcações</button>
                 <button className="btn btn-secondary">Apagar marcações</button>
             </div>
           </div>
