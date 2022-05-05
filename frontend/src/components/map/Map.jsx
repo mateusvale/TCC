@@ -24,7 +24,8 @@ const initialState = {
   isMarkerVisible: false,
   disableButtons: false,
   radiusCircle: 1000,
-  selectValue: "noValue"
+  selectValue: "noValue",
+  markersList: []
 }
 
 export default class Map extends Component {
@@ -132,19 +133,24 @@ export default class Map extends Component {
     this.setState({ isMarkerVisible })
   }
 
-  insertPlacesMarks(){
+  //###placesLocation###
+
+  insertPlacesMarkers(){
     const google = window.google
     let request = {
       location: this.state.circleLocation,
       radius: this.state.radiusCircle,
-      type: ['transit_station'],
-      }
-      const service = new google.maps.places.PlacesService(this.state.map);
-      service.nearbySearch(request, this.callback);
+      // type: ['transit_station'],
+      type: [this.state.selectValue],
+    }
+    console.log(request)
+    const service = new google.maps.places.PlacesService(this.state.map);
+    service.nearbySearch(request, this.callback);
   }
 
-  callback(results, status, pagination) {
+  callback = (results, status, pagination) => {
     const google = window.google
+    const list = []
     pagination.nextPage();  //will load 40 more results. Can be searched only 60 differents bus stations.
     if (status == google.maps.places.PlacesServiceStatus.OK) {
       for (let i = 0; i < results.length; i++) {
@@ -155,8 +161,11 @@ export default class Map extends Component {
           name: results[i].name,
           coordinates: {lat: results[i].geometry.location.lat(), lng: results[i].geometry.location.lng() }
         }
+
+        list.push(info)
         
-        console.log(info);
+
+        //console.log(info);
 
         // marker = new google.maps.Marker({
         //   map: map,
@@ -168,6 +177,8 @@ export default class Map extends Component {
         // markers.push(marker);
       }
     }
+    console.log(list)
+    this.setState({ markersList: list })
     // let establishment = typeOfPlaces.filter(element => element.original == typeOfPlacesDropdown.value);
     // numOfplaces.textContent = (count < 60) ? `Número de ${establishment[0].translated}: ${count}` : `Número de ${establishment[0].translated}: ${count}+`;
   } 
@@ -275,6 +286,18 @@ export default class Map extends Component {
     this.setState({ selectValue: event.target.value })
   }
 
+  // renderPlacesMarkers(markersList){
+  //   return(
+  //     { markersList.forEach(marker => {
+  //         <Marker> </Marker>
+  //     }) }
+  //   )
+  // }
+
+  erasePlacesMarkers(){
+    this.setState({ markersList: [] })
+  }
+  //###placesLocation###
 
   render() {
     return (
@@ -292,6 +315,10 @@ export default class Map extends Component {
             >
               {/* <Marker onLoad={this.onLoad} position={center}/> */}
               <Marker position={ this.state.centerLocation } visible={this.state.isMarkerVisible}/>
+              {this.state.markersList.forEach((marker, index) => {
+                console.log("oi")
+                return <Marker key={index} position={marker.coordinates} visible={true} />
+              })}
               <Circle options={ this.options } radius={this.state.radiusCircle} center={ this.state.circleLocation } visible={ this.state.isCircleVisible } />
               <Autocomplete fields={["formatted_address", "geometry", "name"]} types={["establishment"]}
                   onLoad={this.onLoad}
@@ -353,8 +380,8 @@ export default class Map extends Component {
                     return <option key={index} value={place.original}>{place.translated}</option>
                   })}
                 </select>
-                <button onClick={e => this.insertPlacesMarks()} className="ml-1 mr-1 btn btn-primary">Inserir marcações</button>
-                <button className="btn btn-secondary">Apagar marcações</button>
+                <button onClick={e => this.insertPlacesMarkers()} className="ml-1 mr-1 btn btn-primary">Inserir marcações</button>
+                <button onClick={e => this.erasePlacesMarkers()}  className="btn btn-secondary">Apagar marcações</button>
             </div>
           </div>
         </div>
