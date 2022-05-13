@@ -33,32 +33,24 @@
     {
       "email": "mateus@gmail.com",
       "password": "11111",
-      "login": true,
+      "login": false,
       "id": 6
+    },
+    {
+      "email": "uerj@gmail.com",
+      "password": "123",
+      "id": 7,
+      "login": true
     }
   ],
   "marketing": [
     {
-      "busLine": "600",
-      "radius": 1000,
-      "coordinates": {
-        "lat": -22.940581374458727,
-        "lng": -43.34338301801839
-      },
-      "userId": 1,
-      "id": 1
-    },
-    {
-      "busLine": "202",
-      "radius": 1000,
-      "coordinates": {},
-      "userId": 6,
-      "id": 2
-    },
-    {
       "busLine": "296",
       "radius": 1000,
-      "coordinates": {},
+      "coordinates": {
+        "lat": -22.940383768559233,
+        "lng": -43.366535846234946
+      },
       "userId": 6,
       "id": 3
     },
@@ -73,24 +65,64 @@
       "id": 4
     },
     {
-      "busLine": "117",
-      "radius": 400,
-      "coordinates": {
-        "lat": 28.3705684,
-        "lng": -81.51935879999999
-      },
-      "userId": 6,
-      "id": 5
-    },
-    {
-      "busLine": "369",
+      "busLine": "156",
       "radius": 700,
       "coordinates": {
-        "lat": -22.944928631265483,
-        "lng": -43.35722321653524
+        "lat": -22.940383768559233,
+        "lng": -43.366535846234946
       },
       "userId": 6,
       "id": 6
+    },
+    {
+      "busLine": "157",
+      "radius": 700,
+      "coordinates": {
+        "lat": -22.940383768559233,
+        "lng": -43.366535846234946
+      },
+      "userId": 6,
+      "id": 7
+    },
+    {
+      "busLine": "600",
+      "radius": 700,
+      "coordinates": {
+        "lat": -22.940383768559233,
+        "lng": -43.366535846234946
+      },
+      "userId": 6,
+      "id": 8
+    },
+    {
+      "busLine": "766",
+      "radius": 1000,
+      "coordinates": {
+        "lat": -22.926273961899092,
+        "lng": -43.31593865537801
+      },
+      "userId": 6,
+      "id": 9
+    },
+    {
+      "busLine": "341",
+      "radius": 500,
+      "coordinates": {
+        "lat": -22.911668020740706,
+        "lng": -43.23392215977174
+      },
+      "userId": 7,
+      "id": 10
+    },
+    {
+      "busLine": "600",
+      "radius": 1000,
+      "coordinates": {
+        "lat": -22.936589679354874,
+        "lng": -43.37438935423055
+      },
+      "userId": 7,
+      "id": 11
     }
   ]
 }
