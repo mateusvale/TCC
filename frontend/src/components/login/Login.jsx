@@ -33,17 +33,29 @@ export default class Login extends Component {
         this.setState({ user })
     }
 
-    loginUser() {
+    authenticate() {
         const user = this.state.user;
         const list = this.state.list;
         const element = list.find(u => u.email === user.email)
         if (element){
             const alertMessage = (user.password === element.password) ? "Login realizado" : "Senha errada"
+            if(alertMessage === "Login realizado")
+                this.loginUser(element)
             alert(alertMessage)
         }
         else
             alert('Usuário não existe!');
-        this.clear();
+        //this.clear();
+    }
+
+    loginUser(user){
+        user.login = true
+        console.log(user)
+        axios['put'](`${baseUrl}/${user.id}`, user)
+            .then(resp => {
+                const list = this.getUpdatedList(resp.data);
+                this.setState({ user: initialState.user, list });
+            })
     }
 
     showForms(num) {
@@ -129,7 +141,7 @@ export default class Login extends Component {
                     <div className="row">
                         <div className="col-12 d-flex justify-content-end">
                             <button className="btn btn-primary"
-                                onClick={e => this.loginUser(e)}>
+                                onClick={e => this.authenticate(e)}>
                                 Login
                             </button>
 

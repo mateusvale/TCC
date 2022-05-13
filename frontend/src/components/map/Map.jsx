@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { GoogleMap, LoadScript, Marker, Autocomplete, Circle, useGoogleMap } from '@react-google-maps/api';
 import Main from "../template/Main";
 import Axios from "axios";
-// // import axios from 'axios';
+import axios from 'axios';
 
 const headerProps = {
     icon: 'map-marker',
@@ -17,6 +17,8 @@ const containerStyle = {
 
 const key = process.env.REACT_APP_API_KEY
 
+const userUrl = 'http://localhost:3001/users'
+const marketingUrl = 'http://localhost:3001/marketing'
 const busUrl = 'http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm'
 //const busUrl = 'https://jeap.rio.rj.gov.br/dadosAbertosAPI/v2/transporte/veiculos/onibus'
 
@@ -338,10 +340,39 @@ export default class Map extends Component {
     this.setState({ markersBusList: [] })
   }
 
-  // renderSend(){
-  //   if (this.state.selectValueBus !== "noValue")
-  // }
+  verifyloggedUser(){
+    let user = null
+    axios(userUrl).then(resp => {
+      user = resp.data.find(u => u.login == true)
+      if (user){
+        this.sendMarketing(user.id)
+        return
+      }
+      alert("Nenhum usuário logado!")
+    })
+  }
   
+  sendMarketing(id){
+    const marketing = {
+      busLine: this.state.selectValueBus,
+      radius: this.state.radiusCircle,
+      coordinates: {
+        lat: this.state.circleLocation.lat,
+        lng: this.state.circleLocation.lng
+      },
+      userId: id,
+    }
+    axios['post'](marketingUrl, marketing).then(() => {
+      alert("Informações enviadas")
+      this.resetMarketing()
+    })
+  }
+
+  resetMarketing(){
+    this.resetCircle()
+    this.setState({ selectValueBus: initialState.selectValueBus })
+  }
+
   render() {
     return (
       <Main {...headerProps}>
@@ -458,8 +489,8 @@ export default class Map extends Component {
               <label className="d-flex justify-content-center">Latitude: {this.state.circleLocation.lat}</label>
               <label className="d-flex justify-content-center">Longetude: {this.state.circleLocation.lng}</label>
               <div  className="d-flex justify-content-center">
-                <button className="btn btn-primary mr-2">enviar</button>
-                <button className="btn btn-secondary">reset</button>
+                <button className="btn btn-primary mr-2" onClick={e => this.verifyloggedUser()} >enviar</button>
+                <button className="btn btn-secondary" onClick={e => this.resetMarketing()}>reset</button>
               </div>
             </React.Fragment> : null }
         </div>
