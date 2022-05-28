@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { GoogleMap, LoadScript, Marker, Autocomplete, Circle, useGoogleMap } from '@react-google-maps/api';
 import Main from "../template/Main";
-import Axios from "axios";
 import axios from 'axios';
+import { typeOfPlaces, busLines } from "../../assets/data/data";
 
 const headerProps = {
     icon: 'map-marker',
@@ -39,131 +39,11 @@ const initialState = {
 
 export default class Map extends Component {
 
+// class Map extends React.Component {
+
   state = { ...initialState }
 
   enableCircleByClick = false
-
-  typeOfPlaces = [
-    { original: 	'accounting',	translated: 	'Contabilidade' },
-    { original: 	'airport',	translated: 	'Aeroporto' },
-    { original: 	'amusement_park',	translated: 	'Parque De Diversões' },
-    { original: 	'aquarium',	translated: 	'Aquário' },
-    { original: 	'art_gallery',	translated: 	'Galeria De Arte' },
-    { original: 	'atm',	translated: 	'Caixa Eletrônico' },
-    { original: 	'bakery',	translated: 	'Padaria' },
-    { original: 	'bank',	translated: 	'Banco' },
-    { original: 	'bar',	translated: 	'Bar' },
-    { original: 	'beauty_salon',	translated: 	'Salão De Beleza' },
-    { original: 	'bicycle_store',	translated: 	'Bicicletário' },
-    { original: 	'book_store',	translated: 	'Livraria' },
-    { original: 	'bowling_alley',	translated: 	'Boliche' },
-    { original: 	'bus_station',	translated: 	'Estação De Onibus' },
-    { original: 	'cafe',	translated: 	'Cafeteria' },
-    { original: 	'campground',	translated: 	'Área De Camping' },
-    { original: 	'car_dealer',	translated: 	'Vendedor De Carros' },
-    { original: 	'car_rental',	translated: 	'Aluguel De Carros' },
-    { original: 	'car_repair',	translated: 	'Reparo De Carros' },
-    { original: 	'car_wash',	translated: 	'Lava-Jato' },
-    { original: 	'casino',	translated: 	'Cassino' },
-    { original: 	'cemetery',	translated: 	'Cemitério' },
-    { original: 	'church',	translated: 	'Igreja' },
-    { original: 	'city_hall',	translated: 	'Câmara Municipal' },
-    { original: 	'clothing_store',	translated: 	'Loja De Roupas' },
-    { original: 	'convenience_store',	translated: 	'Loja De Conveniência' },
-    { original: 	'courthouse',	translated: 	'Tribunal' },
-    { original: 	'dentist',	translated: 	'Dentista' },
-    { original: 	'department_store',	translated: 	'Loja De Departamento' },
-    { original: 	'doctor',	translated: 	'Consultório Médico' },
-    { original: 	'drugstore',	translated: 	'Drogaria' },
-    { original: 	'electrician',	translated: 	'Eletricista' },
-    { original: 	'electronics_store',	translated: 	'Loja De Eletrônicos' },
-    { original: 	'embassy',	translated: 	'Embaixada' },
-    { original: 	'fire_station',	translated: 	'Corpo De Bombeiros' },
-    { original: 	'florist',	translated: 	'Florista' },
-    { original: 	'funeral_home',	translated: 	'Funerária' },
-    { original: 	'furniture_store',	translated: 	'Loja De Móveis' },
-    { original: 	'gas_station',	translated: 	'Posto De Gasolina' },
-    { original: 	'gym',	translated: 	'Academia' },
-    { original: 	'hair_care',	translated: 	'Cabelereiro' },
-    { original: 	'hardware_store',	translated: 	'Loja De Hardware' },
-    { original: 	'hindu_temple',	translated: 	'Templo Hindu' },
-    { original: 	'home_goods_store',	translated: 	'Loja De Artigos Para Casa' },
-    { original: 	'hospital',	translated: 	'Hospital' },
-    { original: 	'insurance_agency',	translated: 	'Agência De Seguros' },
-    { original: 	'jewelry_store',	translated: 	'Joalheria' },
-    { original: 	'laundry',	translated: 	'Lavanderia' },
-    { original: 	'lawyer',	translated: 	'Advogado' },
-    { original: 	'library',	translated: 	'Biblioteca' },
-    { original: 	'light_rail_station',	translated: 	'Estação De Trilhos Leves' },
-    { original: 	'liquor_store',	translated: 	'Loja De Bebidas' },
-    { original: 	'local_government_office',	translated: 	'Escritório Do Governo Local' },
-    { original: 	'locksmith',	translated: 	'Chaveiro' },
-    { original: 	'lodging',	translated: 	'Alojamento' },
-    { original: 	'meal_delivery',	translated: 	'Delivery De Comida' },
-    { original: 	'meal_takeaway',	translated: 	'Local De Resgate De Comida' },
-    { original: 	'mosque',	translated: 	'Mesquita' },
-    { original: 	'movie_rental',	translated: 	'Aluguel De Filme' },
-    { original: 	'movie_theater',	translated: 	'Cinema' },
-    { original: 	'moving_company',	translated: 	'Empresa De Mudança' },
-    { original: 	'museum',	translated: 	'Museu' },
-    { original: 	'night_club',	translated: 	'Boate' },
-    { original: 	'painter',	translated: 	'Pintor' },
-    { original: 	'park',	translated: 	'Parque' },
-    { original: 	'parking',	translated: 	'Estacionamento' },
-    { original: 	'pet_store',	translated: 	'Loja De Animais' },
-    { original: 	'pharmacy',	translated: 	'Farmacia' },
-    { original: 	'physiotherapist',	translated: 	'Fisioterapeuta' },
-    { original: 	'plumber',	translated: 	'Encanador' },
-    { original: 	'police',	translated: 	'Polícia' },
-    { original: 	'post_office',	translated: 	'Correios' },
-    { original: 	'primary_school',	translated: 	'Escola Primaria' },
-    { original: 	'real_estate_agency',	translated: 	'Agência Imobiliária' },
-    { original: 	'restaurant',	translated: 	'Restaurante' },
-    { original: 	'roofing_contractor',	translated: 	'Empreiteiro De Telhados' },
-    { original: 	'rv_park',	translated: 	'Rv_Park' },
-    { original: 	'school',	translated: 	'Escola' },
-    { original: 	'secondary_school',	translated: 	'Ensino Médio' },
-    { original: 	'shoe_store',	translated: 	'Loja De Sapatos' },
-    { original: 	'shopping_mall',	translated: 	'Centro De Compras' },
-    { original: 	'spa',	translated: 	'Spa' },
-    { original: 	'stadium',	translated: 	'Estádio' },
-    { original: 	'storage',	translated: 	'Local De Armazenamento' },
-    { original: 	'store',	translated: 	'Loja' },
-    { original: 	'subway_station',	translated: 	'Estação De Metrô' },
-    { original: 	'supermarket',	translated: 	'Supermercado' },
-    { original: 	'synagogue',	translated: 	'Sinagoga' },
-    { original: 	'taxi_stand',	translated: 	'Ponto De Taxi' },
-    { original: 	'tourist_attraction',	translated: 	'Atração Turística' },
-    { original: 	'train_station',	translated: 	'Estação De Trem' },
-    { original: 	'transit_station',	translated: 	'Ponto De Ônibus' },
-    { original: 	'travel_agency',	translated: 	'Agência De Viagens' },
-    { original: 	'university',	translated: 	'Universidade' },
-    { original: 	'veterinary_care',	translated: 	'Veterinário' },
-    { original: 	'zoo',	translated: 	'Jardim Zoológico' },
-    ];
-
-    busLines = ['6',	'7',	'100',	'102',	'104',	'105',	'107',	'108',	'109',	'110',	'112',	'117',
-    '133',	'201',	'202',	'209',	'210',	'217',	'220',	'232',	'238',	'239',	'247',	'249',	'265',
-    '275',	'292',	'296',	'298',	'300',	'301',	'302',	'306',	'309',	'312',	'313',	'315',	'321',
-    '323',	'324',	'325',	'326',	'327',	'328',	'329',	'335',	'338',	'339',	'341',	'342',	'343',
-    '348',	'350',	'353',	'355',	'361',	'362',	'363',	'368',	'369',	'371',	'378',	'380',	'383',
-    '384',	'386',	'390',	'393',	'394',	'397',	'399',	'409',	'412',	'415',	'416',	'422',	'426',
-    '432',	'433',	'440',	'442',	'448',	'455',	'457',	'460',	'461',	'463',	'471',	'472',	'473',
-    '474',	'476',	'483',	'485',	'492',	'497',	'498',	'507',	'538',	'539',	'548',	'550',	'552',
-    '553',	'554',	'557',	'558',	'565',	'583',	'584',	'600',	'601',	'606',	'607',	'608',	'610',
-    '611',	'613',	'614',	'615',	'621',	'622',	'623',	'624',	'625',	'627',	'628',	'629',	'630',
-    '634',	'636',	'638',	'639',	'645',	'650',	'663',	'665',	'669',	'679',	'680',	'685',	'687',
-    '688',	'691',	'692',	'693',	'696',	'711',	'712',	'721',	'731',	'745',	'746',	'752',	'756',
-    '759',	'766',	'770',	'771',	'774',	'775',	'777',	'779',	'783',	'790',	'793',	'794',	'795',
-    '801',	'802',	'803',	'804',	'805',	'810',	'812',	'819',	'821',	'822',	'829',	'833',	'835',
-    '837',	'838',	'840',	'841',	'842',	'843',	'844',	'846',	'847',	'848',	'849',	'850',	'851',
-    '852',	'853',	'859',	'861',	'862',	'863',	'864',	'866',	'867',	'868',	'869',	'875',	'878',
-    '880',	'883',	'884',	'892',	'893',	'895',	'897',	'898',	'900',	'905',	'906',	'908',	'910',
-    '913',	'917',	'918',	'919',	'920',	'922',	'923',	'925',	'926',	'932',	'936',	'940',	'942',
-    '945',	'946',	'950',	'953',	'954',	'2110',	'2111',	'2112',	'2114',	'2303',	'2307',	'2310',	'2331',
-    '2332',	'2334',	'2335',	'2336',	'2337',	'2338',	'2339',	'2342',	'2343',	'2344',	'2345',	'2381',	'2383',
-    '2802',	'2803',	'2804',	'SP265',	'SP513',	'SP803',	'SP841',	'SV474',	'SV774',	'SV779',	'SV790',
-    'SV843',	'SV866',	'SV917'];
 
   // map = useGoogleMap()
 
@@ -321,7 +201,7 @@ export default class Map extends Component {
   callBusApi(){
   const url = `${busUrl}/onibus/${this.state.selectValueBus}`
   // const url = `${busUrl}/900`
-    Axios(url).then(resp => {
+    axios(url).then(resp => {
       console.log(resp.data)
       const markersBusList = this.getUpdatedMarkersBusList(resp.data.DATA)
       this.setState({ markersBusList })
@@ -387,16 +267,13 @@ export default class Map extends Component {
               zoom={15}
               onClick={e => this.onClick(e)}
             >
-              {/* <Marker onLoad={this.onLoad} position={center}/> */}
               <Marker position={ this.state.centerLocation } visible={this.state.isMarkerVisible}/>
               
               {this.state.markersPlaceList.map((marker, index) => {
-                //console.log("oi")
                 return <Marker key={index} position={marker.coordinates} visible={true} label={(index+1).toString()}/>
               })}
 
               {this.state.markersBusList.map((marker, index) => {
-                //console.log("oi")
                 return <Marker key={index} position={{ lat: marker[3], lng: marker[4] }} visible={true} label={(marker[2]).toString()}/>
               })}
 
@@ -458,7 +335,7 @@ export default class Map extends Component {
             <div className="col-sm-8">
                 <select value={this.state.selectValuePlace} onChange={e => this.handleSelectChange(e, "place")} className="align-self-center">
                   <option value='noValue'>Sem valor</option>
-                  {this.typeOfPlaces.map((place, index) => {
+                  {typeOfPlaces.map((place, index) => {
                     return <option key={index} value={place.original}>{place.translated}</option>
                   })}
                 </select>
@@ -472,7 +349,7 @@ export default class Map extends Component {
             <div className="col-sm-8">
                 <select value={this.state.selectValueBus} onChange={e => this.handleSelectChange(e, "bus")} className="align-self-center">
                   <option value='noValue'>Sem valor</option>
-                  {this.busLines.map((line, index) => {
+                  {busLines.map((line, index) => {
                     return <option key={index} value={line}>{line}</option>
                   })}
                 </select>

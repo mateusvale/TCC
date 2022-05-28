@@ -33,7 +33,7 @@ export default class Map extends Component {
           }
           alert("Nenhum usuário logado!")
         })
-      }
+    }
 
     verifyMarketing(id){
         axios(marketingUrl).then(resp => {

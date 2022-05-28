@@ -2,23 +2,33 @@ import React, { Component } from "react";
 import Main from "../template/Main";
 import axios from 'axios';
 
-const headerProps = {
-    icon: 'user-circle-o',
-    title: 'Login',
-    subtitle: 'Login na plataforma'
-}
+// const headerProps = {
+//     icon: 'user-circle-o',
+//     title: 'Login',
+//     subtitle: 'Login na plataforma',
+//     login: authenticateUser
+// }
 
 const baseUrl = 'http://localhost:3001/users'
 const initialState = {
     user: { email: '', password: '' },
-    list: []
+    list: [],
+    authenticateUser: 'Login'
 }
 
-export default class Login extends Component {
+
+export class Login extends Component {
 
     state = { ...initialState }
 
-    componentWillMount() {
+    headerProps = {
+        icon: 'user-circle-o',
+        title: 'Login',
+        subtitle: 'Login na plataforma',
+        login: this.state.authenticateUser
+    }
+
+    componentDidMount() {
         axios(baseUrl).then(resp => {
             this.setState({ list: resp.data })
         })
@@ -50,7 +60,9 @@ export default class Login extends Component {
 
     loginUser(user){
         user.login = true
-        console.log(user)
+        // console.log(user.email)
+        this.setState({ authenticateUser: user.email })
+        // console.log(this.state.authenticateUser)
         axios['put'](`${baseUrl}/${user.id}`, user)
             .then(resp => {
                 const list = this.getUpdatedList(resp.data);
@@ -198,7 +210,7 @@ export default class Login extends Component {
 
     render() {
         return (
-            <Main {...headerProps}>
+            <Main {...this.headerProps}>
                 {this.renderMainForm()}
                 {this.renderNewAccountOrResetPassword()}
             </Main>
