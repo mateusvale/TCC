@@ -36,15 +36,10 @@ class Login extends Component {
 
     constructor(props){
         super(props)
-        // const { dispacth } = this.props
-        // console.log("OIOIOIOI")
-        // console.log(this.props)
     }
 
-    // handleSubmit  = (id, email)  => { 
     AuthenticateLogin  = (id, email)  => { 
         const { dispatch } = this.props;                
-        // dispatch(AuthenticateLogin(id, email));
         dispatch({
             type: 'AUTHENTICATE_LOGIN',
             id,
@@ -52,17 +47,17 @@ class Login extends Component {
         })
     }
 
-    headerProps = {
-        icon: 'user-circle-o',
-        title: 'Login',
-        subtitle: 'Login na plataforma',
-        login: this.state.authenticateUser
-    }
+    // headerProps = {
+    //     icon: 'user-circle-o',
+    //     title: 'Login',
+    //     subtitle: 'Login na plataforma',
+    //     login: this.state.authenticateUser
+    // }
 
     componentDidMount() {
         const { dispatch } = this.props;
         dispatch({
-            type: 'LOGIN_SCREEN',
+            type: 'SCREEN_HEADER',
             icon: 'user-circle-o',
             title: 'Login',
             subtitle: 'Login na plataforma'

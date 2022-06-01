@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Main from "../template/Main";
 import axios from 'axios';
+import { connect } from "react-redux";
 
 const headerProps = {
     icon: 'tachometer',
@@ -15,13 +16,23 @@ const initialState = {
     list: []
 }
 
-export default class Map extends Component {
+class Dashboard extends Component {
 
     state = { ...initialState }
 
-    componentWillMount() {
+    // componentWillMount() {
+    //     this.verifyloggedUser()
+    // }
+    componentDidMount() {
+        const { dispatch } = this.props;
+        dispatch({
+            type: 'SCREEN_HEADER',
+            icon: 'tachometer',
+            title: 'Dashboard',
+            subtitle: 'Gerencie todas as propagandas que possui.'
+        })
         this.verifyloggedUser()
-    }
+      }
 
     verifyloggedUser(){
         let user = null
@@ -96,3 +107,5 @@ export default class Map extends Component {
     }
 
 }
+
+export default connect()(Dashboard)

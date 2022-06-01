@@ -3,6 +3,7 @@ import { GoogleMap, LoadScript, Marker, Autocomplete, Circle, useGoogleMap } fro
 import Main from "../template/Main";
 import axios from 'axios';
 import { typeOfPlaces, busLines } from "../../assets/data/data";
+import { connect } from "react-redux";
 
 const headerProps = {
     icon: 'map-marker',
@@ -37,11 +38,19 @@ const initialState = {
   markersBusList: []
 }
 
-export default class Map extends Component {
-
-// class Map extends React.Component {
+class Map extends Component {
 
   state = { ...initialState }
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+        type: 'SCREEN_HEADER',
+        icon: 'map-marker',
+        title: 'Mapa',
+        subtitle: 'Cadastre o ponto no mapa onde gostaria de apresentar sua propaganda.'
+    })
+  }
 
   enableCircleByClick = false
 
@@ -375,3 +384,5 @@ export default class Map extends Component {
     )
   }
 }
+
+export default connect()(Map)
