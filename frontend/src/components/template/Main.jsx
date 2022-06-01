@@ -1,6 +1,9 @@
 import './Main.css'
 import React, { Component } from 'react'
 import Header from './Header'
+// import { Provider } from "react-redux";
+
+// import store from '../../store';
 
 // export default props =>
 const initialState = {
@@ -19,12 +22,14 @@ export default class Main extends Component{
     render(){
         return (
             <React.Fragment>
-                <Header {...this.props}/>
-                <main className='content container-fluid'>
-                    <div className="p-3 mt-3">
-                        {this.props.children}
-                    </div>
-                </main>
+                {/* <Provider store={store} > */}
+                    <Header {...this.props}/>
+                    <main className='content container-fluid'>
+                        <div className="p-3 mt-3">
+                            {this.props.children}
+                        </div>
+                    </main>
+                {/* </Provider> */}
             </React.Fragment>
         )
     }

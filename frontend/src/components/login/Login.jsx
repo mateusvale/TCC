@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 import Main from "../template/Main";
+
 import axios from 'axios';
+import { connect } from "react-redux";
+// import { Provider } from "react-redux";
+// import store from '../../store';
+
+// import store from '../../store';
 
 // const headerProps = {
 //     icon: 'user-circle-o',
@@ -16,10 +22,35 @@ const initialState = {
     authenticateUser: 'Login'
 }
 
+// function AuthenticateLogin(id, name){
+//     return {
+//         type: 'AUTHENTICATE_LOGIN',
+//         id,
+//         email
+//     }
+// }
 
-export class Login extends Component {
+class Login extends Component {
 
     state = { ...initialState }
+
+    constructor(props){
+        super(props)
+        // const { dispacth } = this.props
+        // console.log("OIOIOIOI")
+        // console.log(this.props)
+    }
+
+    // handleSubmit  = (id, email)  => { 
+    AuthenticateLogin  = (id, email)  => { 
+        const { dispatch } = this.props;                
+        // dispatch(AuthenticateLogin(id, email));
+        dispatch({
+            type: 'AUTHENTICATE_LOGIN',
+            id,
+            email
+        })
+    }
 
     headerProps = {
         icon: 'user-circle-o',
@@ -29,6 +60,13 @@ export class Login extends Component {
     }
 
     componentDidMount() {
+        const { dispatch } = this.props;
+        dispatch({
+            type: 'LOGIN_SCREEN',
+            icon: 'user-circle-o',
+            title: 'Login',
+            subtitle: 'Login na plataforma'
+        })
         axios(baseUrl).then(resp => {
             this.setState({ list: resp.data })
         })
@@ -61,6 +99,8 @@ export class Login extends Component {
     loginUser(user){
         user.login = true
         // console.log(user.email)
+        this.AuthenticateLogin(user.id, user.email)
+        // AuthenticateLogin(user.id, user.email)
         this.setState({ authenticateUser: user.email })
         // console.log(this.state.authenticateUser)
         axios['put'](`${baseUrl}/${user.id}`, user)
@@ -210,10 +250,26 @@ export class Login extends Component {
 
     render() {
         return (
-            <Main {...this.headerProps}>
-                {this.renderMainForm()}
-                {this.renderNewAccountOrResetPassword()}
-            </Main>
+                <Main {...this.headerProps}>
+                    {this.renderMainForm()}
+                    {this.renderNewAccountOrResetPassword()}
+                </Main>
         )
     }
 }
+
+// const mapStateToProps = (state, ownProps) => {
+//     let id = ownProps.match.params.post_id
+//     return {
+//         post: state.posts.find(post => post.id === id)
+//     }
+// }
+
+// const mapDispatchToProps = (dispatch) => {
+//     return {
+//         deletePost: (id) => {dispatch({type: 'DELETE_POST', id: id})}
+//     }
+// }
+
+// export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default connect()(Login)
