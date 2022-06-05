@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { GoogleMap, LoadScript, Marker, Autocomplete, Circle, useGoogleMap } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker, Autocomplete, Circle } from '@react-google-maps/api';
 import Main from "../template/Main";
 import axios from 'axios';
 import { typeOfPlaces, busLines } from "../../assets/data/data";
@@ -18,7 +18,7 @@ const containerStyle = {
 
 const key = process.env.REACT_APP_API_KEY
 
-const userUrl = 'http://localhost:3001/users'
+const userUrl = 'http://localhost:3001/logged_user'
 const marketingUrl = 'http://localhost:3001/marketing'
 const busUrl = 'http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm'
 //const busUrl = 'https://jeap.rio.rj.gov.br/dadosAbertosAPI/v2/transporte/veiculos/onibus'
@@ -32,7 +32,6 @@ const initialState = {
   disableButtons: false,
   radiusCircle: 1000,
   selectValuePlace: "noValue",
-  // selectValueBus: 100,
   selectValueBus: "noValue",
   markersPlaceList: [],
   markersBusList: []
@@ -232,9 +231,10 @@ class Map extends Component {
   verifyloggedUser(){
     let user = null
     axios(userUrl).then(resp => {
-      user = resp.data.find(u => u.login == true)
+      user = resp.data.find(u => u.login_id != -1 )
       if (user){
-        this.sendMarketing(user.id)
+        console.log(user.login_id)
+        this.sendMarketing(user.login_id)
         return
       }
       alert("Nenhum usuário logado!")

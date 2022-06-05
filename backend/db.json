@@ -3,44 +3,42 @@
     {
       "email": "uerj1@gmail.com",
       "password": "1234",
-      "id": 1,
-      "login": false
+      "id": 1
     },
     {
       "email": "mateusvalexandre2@gmail.com",
       "password": "123",
-      "login": false,
       "id": 2
     },
     {
       "email": "lucasvalexandre@gmail.com",
       "password": "123",
-      "login": false,
       "id": 3
     },
     {
       "email": "celsovalexandre@gmail.com",
       "password": "123",
-      "login": false,
       "id": 4
     },
     {
       "email": "cristinavalexandre@gmail.com",
       "password": "321",
-      "login": false,
       "id": 5
     },
     {
       "email": "mateus@gmail.com",
       "password": "11111",
-      "login": false,
       "id": 6
     },
     {
       "email": "uerj@gmail.com",
       "password": "1234",
-      "id": 7,
-      "login": true
+      "id": 7
+    },
+    {
+      "email": "rebecargrassini@hotmail.com",
+      "password": "123",
+      "id": 8
     }
   ],
   "marketing": [
@@ -133,12 +131,42 @@
       },
       "userId": 7,
       "id": 12
+    },
+    {
+      "busLine": "202",
+      "radius": 800,
+      "coordinates": {
+        "lat": -22.940581374458727,
+        "lng": -43.34338301801839
+      },
+      "userId": 5,
+      "id": 13
+    },
+    {
+      "busLine": "100",
+      "radius": 1000,
+      "coordinates": {
+        "lat": -22.940581374458727,
+        "lng": -43.34338301801839
+      },
+      "userId": 5,
+      "id": 14
+    },
+    {
+      "busLine": "766",
+      "radius": 700,
+      "coordinates": {
+        "lat": -22.940581374458727,
+        "lng": -43.34338301801839
+      },
+      "userId": 3,
+      "id": 15
     }
   ],
   "logged_user": [
     {
-      "login_id": -1,
-      "email": "Login",
+      "login_id": 8,
+      "email": "rebecargrassini@hotmail.com",
       "id": 1
     }
   ]

@@ -74,10 +74,10 @@ class Login extends Component {
     }
 
     loginUser(user){
-        user.login = true
+        // user.login = true
         console.log(user)
-        this.AuthenticateLogin(user.id, user.email)
-        LogInUserDB(user.id, user.email)
+        this.AuthenticateLogin(user.id, user.email) //REDUX method
+        LogInUserDB(user.id, user.email) 
         this.setState({ authenticateUser: user.email })
         // console.log(this.state.authenticateUser)
         axios['put'](`${baseUrl}/${user.id}`, user)
