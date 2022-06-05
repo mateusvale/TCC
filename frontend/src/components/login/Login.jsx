@@ -3,10 +3,7 @@ import Main from "../template/Main";
 
 import axios from 'axios';
 import { connect } from "react-redux";
-// import { Provider } from "react-redux";
-// import store from '../../store';
-
-// import store from '../../store';
+import { LogInUserDB } from "../../helpers/db_controller";
 
 // const headerProps = {
 //     icon: 'user-circle-o',
@@ -21,14 +18,6 @@ const initialState = {
     list: [],
     authenticateUser: 'Login'
 }
-
-// function AuthenticateLogin(id, name){
-//     return {
-//         type: 'AUTHENTICATE_LOGIN',
-//         id,
-//         email
-//     }
-// }
 
 class Login extends Component {
 
@@ -46,13 +35,6 @@ class Login extends Component {
             email
         })
     }
-
-    // headerProps = {
-    //     icon: 'user-circle-o',
-    //     title: 'Login',
-    //     subtitle: 'Login na plataforma',
-    //     login: this.state.authenticateUser
-    // }
 
     componentDidMount() {
         const { dispatch } = this.props;
@@ -93,9 +75,9 @@ class Login extends Component {
 
     loginUser(user){
         user.login = true
-        // console.log(user.email)
+        console.log(user)
         this.AuthenticateLogin(user.id, user.email)
-        // AuthenticateLogin(user.id, user.email)
+        LogInUserDB(user.id, user.email)
         this.setState({ authenticateUser: user.email })
         // console.log(this.state.authenticateUser)
         axios['put'](`${baseUrl}/${user.id}`, user)
@@ -253,18 +235,4 @@ class Login extends Component {
     }
 }
 
-// const mapStateToProps = (state, ownProps) => {
-//     let id = ownProps.match.params.post_id
-//     return {
-//         post: state.posts.find(post => post.id === id)
-//     }
-// }
-
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         deletePost: (id) => {dispatch({type: 'DELETE_POST', id: id})}
-//     }
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Login)
 export default connect()(Login)

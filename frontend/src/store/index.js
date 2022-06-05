@@ -1,9 +1,11 @@
 import { createStore } from 'redux'
+import { LogOutUserDB } from "../helpers/db_controller"
 
 const INICIAL_STATE = {
     id: -1,
     email: "Login"
 }
+
 
 function reducer(state = INICIAL_STATE, action){
     if (action.type === 'AUTHENTICATE_LOGIN'){
@@ -11,6 +13,10 @@ function reducer(state = INICIAL_STATE, action){
     }
     else if (action.type === 'SCREEN_HEADER'){
         return { ... state, icon: action.icon, title: action.title, subtitle: action.subtitle  }
+    }
+    else if (action.type === 'LOGOUT_USER'){
+        LogOutUserDB()
+        return { ... state, id: INICIAL_STATE.id, email: INICIAL_STATE.email }
     }
     
     return state;

@@ -1,10 +1,10 @@
 {
   "users": [
     {
-      "email": "rebecagrassini@gmail.com",
+      "email": "uerj1@gmail.com",
       "password": "1234",
-      "login": false,
-      "id": 1
+      "id": 1,
+      "login": false
     },
     {
       "email": "mateusvalexandre2@gmail.com",
@@ -123,6 +123,23 @@
       },
       "userId": 7,
       "id": 11
+    },
+    {
+      "busLine": "390",
+      "radius": 1600,
+      "coordinates": {
+        "lat": -22.93967238493271,
+        "lng": -43.356279078962
+      },
+      "userId": 7,
+      "id": 12
+    }
+  ],
+  "logged_user": [
+    {
+      "login_id": -1,
+      "email": "Login",
+      "id": 1
     }
   ]
 }

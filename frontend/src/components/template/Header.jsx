@@ -2,9 +2,40 @@ import './Header.css'
 import React from 'react'
 
 import { connect } from "react-redux";
+import axios from 'axios';
+// import { LoggedUserDB } from "../../helpers/db_controller"
 
-// export default props => 
-const Header = ({ props, login}) => {
+function logout(){
+    return {
+        type: 'LOGOUT_USER'
+    }
+}
+// function AuthenticateLogin(id, email) { 
+//     return {
+//         type: 'AUTHENTICATE_LOGIN',
+//         id,
+//         email
+//     }
+// }
+
+
+const baseUrl = 'http://localhost:3001/logged_user'
+
+const Header = ({ props, login, dispatch}) => {
+    
+
+    // let loggedUser;
+    // axios(baseUrl).then(resp => {
+    //     loggedUser = {
+    //         login_id: resp.data.login_id,
+    //         email: resp.data.email
+    //     }
+    // })
+
+    // if (loggedUser.login_id != -1){
+    //     AuthenticateLogin(loggedUser.login_id, loggedUser.email)
+    // }
+
     return (
         <header className='header d-none d-sm-flex flex-column'>
             <div>
@@ -16,16 +47,10 @@ const Header = ({ props, login}) => {
                         </h1>
                         <label className='mt-2'><i className={`fa fa-user `}></i>{login.email}</label>
                     </div>
-                    {/* <div className='d-flex'> */}
-                        {/* <p className='lead text-muted'>props.subtitle</p> */}
                         <p className='lead text-muted'>{login.subtitle}</p>
-                        <label className='d-flex justify-content-end mb-5'>Sair</label>
-                    {/* </div> */}
+                        <label className='d-flex justify-content-end mb-5' onClick={() => dispatch(logout())}>Sair</label>
                 </div>
-                {/* <div className='d-flex justify-content-end'>
-                    <label className='d-flex justify-content-end'>Usuário</label>
-                    <label className='d-flex justify-content-end mb-5'>Sair</label>
-                </div> */}
+                
             </div>
         </header>
     )
