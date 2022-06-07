@@ -18,8 +18,10 @@ const containerStyle = {
 
 const key = process.env.REACT_APP_API_KEY
 
-const userUrl = 'http://localhost:3001/logged_user'
-const marketingUrl = 'http://localhost:3001/marketing'
+// const userUrl = 'http://localhost:3001/logged_user'
+// const marketingUrl = 'http://localhost:3001/marketing'
+const userUrl = 'https://json-server-heroku-tcc.herokuapp.com/logged_user'
+const marketingUrl = 'https://json-server-heroku-tcc.herokuapp.com/marketing'
 const busUrl = 'http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm'
 //const busUrl = 'https://jeap.rio.rj.gov.br/dadosAbertosAPI/v2/transporte/veiculos/onibus'
 

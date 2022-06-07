@@ -5,7 +5,8 @@ const INICIAL_STATE = {
     email: "Login"
 }
 
-const baseUrl = 'http://localhost:3001/logged_user'
+// const baseUrl = 'http://localhost:3001/logged_user'
+const baseUrl = 'https://json-server-heroku-tcc.herokuapp.com/logged_user'
 
 export const LogOutUserDB = () => axios['put'](`${baseUrl}/1`, INICIAL_STATE);
 

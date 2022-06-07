@@ -12,7 +12,8 @@ import { LogInUserDB } from "../../helpers/db_controller";
 //     login: authenticateUser
 // }
 
-const baseUrl = 'http://localhost:3001/users'
+// const baseUrl = 'http://localhost:3001/users'
+const baseUrl = 'https://json-server-heroku-tcc.herokuapp.com/users'
 const initialState = {
     user: { email: '', password: '' },
     list: [],

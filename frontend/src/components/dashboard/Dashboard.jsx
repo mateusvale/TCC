@@ -10,9 +10,11 @@ const headerProps = {
 }
 
 // const userUrl = 'http://localhost:3001/users'
-const userUrl = 'http://localhost:3001/logged_user'
+// const userUrl = 'http://localhost:3001/logged_user'
+const userUrl = 'https://json-server-heroku-tcc.herokuapp.com/logged_user'
 
-const marketingUrl = 'http://localhost:3001/marketing'
+// const marketingUrl = 'http://localhost:3001/marketing'
+const marketingUrl = 'https://json-server-heroku-tcc.herokuapp.com/marketing'
 
 const initialState = {
     list: []
