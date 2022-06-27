@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { GoogleMap, LoadScript, Marker, Autocomplete, Circle } from '@react-google-maps/api';
 import Main from "../template/Main";
+import GoogleDriveFileUploader from "../uploader/GoogleDriveFileUploader";
 import axios from 'axios';
 import { typeOfPlaces, busLines } from "../../assets/data/data";
 import { connect } from "react-redux";
@@ -381,6 +382,7 @@ class Map extends Component {
                 <button className="btn btn-secondary" onClick={e => this.resetMarketing()}>reset</button>
               </div>
             </React.Fragment> : null }
+          <GoogleDriveFileUploader/>
         </div>
       </Main>
     )
