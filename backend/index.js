@@ -1,3 +1,25 @@
+// import Multer from "multer"
+const Multer = require('multer')
+
+const multer = Multer({
+    storage: Multer.diskStorage({
+        destination:function (req, file, callback) {
+            callback(null, `${__dirname}/image-files`)
+        },
+        filename: function (req, file, callback) {
+            callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname)
+        },
+    }),
+    limits: {
+        fileSize: 5 * 1024 *1024
+    }
+})
+
+const express = require("express")
+const app = express()
+app.listen(5000)
+
+
 require('dotenv').config();
 
 const { google } = require('googleapis')
@@ -38,14 +60,14 @@ const drive = google.drive({
 });
 
 //file path for out file
-const filePath = path.join(__dirname, 'image.jpeg');
+const filePath = path.join(__dirname, 'limoes.jpeg');
 
 //function to upload the file
 async function uploadFile() {
     try{
       const response = await drive.files.create({
             requestBody: {
-                name: 'couple.jpeg', //file name in the google drive
+                name: 'limoes.jpeg', //file name in the google drive
                 parents: ['1VosBO4KKYoIVOYn7rWFQh2cuINjIYqQb'], //path that you store the uploaded file in google drive
                 mimeType: 'image/jpg',
             },
@@ -92,8 +114,22 @@ async function generatePublicUrl(file_id) {
     }
 }
 
+
+app.post("/upload-file-to-google-drive", multer.single("file"), async (req, res, next) => {
+    try {
+        if (!req.file){
+            res.status(400).send("No file uploaded.")
+            return
+        }
+        const response = await uploadFile()
+        res.status(200).json({response})
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+
 // deleteFile('1gp4sy-at5z5qNEoneN4JAeui_F-OPxOS')
-
 // uploadFile();
+// generatePublicUrl('1S-qTx-9sPETmfoNNr3nXCQiNFhp__LZq')
 
-generatePublicUrl('1S-qTx-9sPETmfoNNr3nXCQiNFhp__LZq')
