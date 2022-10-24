@@ -23,8 +23,10 @@ const key = process.env.REACT_APP_API_KEY
 // const marketingUrl = 'http://localhost:3001/marketing'
 const userUrl = 'https://json-server-heroku-tcc.herokuapp.com/logged_user'
 const marketingUrl = 'https://json-server-heroku-tcc.herokuapp.com/marketing'
-const busUrl = 'http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm'
+//const busUrl = 'http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm'
 //const busUrl = 'https://jeap.rio.rj.gov.br/dadosAbertosAPI/v2/transporte/veiculos/onibus'
+// const busUrl = 'https://jeap.rio.rj.gov.br/dadosAbertosAPI/v2/transporte/veiculos'
+const busUrl = 'http://localhost:3333/onibus'
 
 const initialState = {
   centerLocation: { lat: -22.940581374458727, lng: -43.34338301801839 },
@@ -210,11 +212,11 @@ class Map extends Component {
   //###placesLocation###
 
   callBusApi(){
-  const url = `${busUrl}/onibus/${this.state.selectValueBus}`
+  const url = `${busUrl}/${this.state.selectValueBus}`
   // const url = `${busUrl}/900`
     axios(url).then(resp => {
-      console.log(resp.data)
-      const markersBusList = this.getUpdatedMarkersBusList(resp.data.DATA)
+      //console.log(resp.data)
+      const markersBusList = this.getUpdatedMarkersBusList(resp.data)
       this.setState({ markersBusList })
     })
   }
@@ -286,7 +288,7 @@ class Map extends Component {
               })}
 
               {this.state.markersBusList.map((marker, index) => {
-                return <Marker key={index} position={{ lat: marker[3], lng: marker[4] }} visible={true} label={(marker[2]).toString()}/>
+                return <Marker key={index} position={{ lat: parseFloat(marker.latitude), lng: parseFloat(marker.longitude) }} visible={true} label={(marker.linha)}/>
               })}
 
 
