@@ -14,7 +14,8 @@ const corsOptions = {
 
 app.get('/onibus/:linha', cors(corsOptions), async (request, response) => {
     let { linha } = request.params;
-    linha = linha == ":linha" ? "" : linha
+    // linha = linha == ":linha" ? "" : linha
+    linha = linha == "all" ? "" : linha
     const url = `https://jeap.rio.rj.gov.br/dadosAbertosAPI/v2/transporte/veiculos/onibus2/${linha}`
     const { statusCode, data, headers } = await curly.get(url)
     return response.status(200).json(data)

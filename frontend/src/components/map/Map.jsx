@@ -39,7 +39,8 @@ const initialState = {
   selectValuePlace: "noValue",
   selectValueBus: "noValue",
   markersPlaceList: [],
-  markersBusList: []
+  markersBusList: [],
+  lineSugestions: ""
 }
 
 class Map extends Component {
@@ -58,11 +59,8 @@ class Map extends Component {
 
   enableCircleByClick = false
 
-  // map = useGoogleMap()
-
   boundsCallBack = () => {
     const {map} = this.state;
-    //console.log('map: ', map)
 }
 
   handleMapLoad = (map) => {
@@ -71,16 +69,12 @@ class Map extends Component {
 
   constructor (props) {
     super(props)
-
     this.autocomplete = null
-
     this.onLoad = this.onLoad.bind(this)
     this.onPlaceChanged = this.onPlaceChanged.bind(this)
   }
 
   onLoad (autocomplete) {
-    //console.log('autocomplete: ', autocomplete)
-
     this.autocomplete = autocomplete
   }
 
@@ -233,6 +227,46 @@ class Map extends Component {
     this.setState({ markersBusList: [] })
   }
 
+  arePointsInTheCircle(checkPoint, centerPoint, m) { // credits to user:69083
+    var km = m/1000;
+    var ky = 40000 / 360;
+    // console.log(`checkpoint: {lat: ${checkPoint.lat}, lng: ${checkPoint.lng}}`)
+    // console.log(`centerPoint: {lat: ${centerPoint.lat}, lng: ${centerPoint.lng}}`)
+    var kx = Math.cos(Math.PI * centerPoint.lat / 180.0) * ky;
+    var dx = Math.abs(centerPoint.lng - checkPoint.lng) * kx;
+    var dy = Math.abs(centerPoint.lat - checkPoint.lat) * ky;
+    return Math.sqrt(dx * dx + dy * dy) <= km;
+  }
+
+  getLinesSugestions(){
+    if (!this.state.isCircleVisible){
+      alert("O círculo precisa estar habilitado para se obter as sugestões de linhas.")
+    }
+    else{
+      axios(`${busUrl}/all`).then(resp => {
+        let sugestionLines = []
+        resp.data.forEach(element => {
+          let positionBus = { lat: parseFloat(element.latitude), lng: parseFloat(element.longitude) }
+          if (this.arePointsInTheCircle(this.state.circleLocation, positionBus, parseInt(this.state.radiusCircle))){
+            if (!sugestionLines.includes(element.linha)){
+              sugestionLines.push(element.linha)
+            }
+          }
+        })
+        let textSugestion = '';
+        sugestionLines.forEach(element => {
+          textSugestion += `${element} - `
+        });
+        const lineSugestions = (textSugestion) ? textSugestion.substring(0, textSugestion.length - 3) : 'Não existe nenhum ônibus passando no círculo do mapa no momento.';
+        this.setState({ lineSugestions })
+      })
+    }
+  }
+
+  closeSugestion(){
+    this.setState({ lineSugestions: "" })
+  }
+
   verifyloggedUser(){
     let user = null
     axios(userUrl).then(resp => {
@@ -370,6 +404,11 @@ class Map extends Component {
                 <button onClick={e => this.callBusApi()} className="ml-1 mr-1 btn btn-primary">Inserir ônibus no mapa</button>
                 {/* <button onClick={e => this.erasePlacesMarkers()}  className="btn btn-secondary mr-1">Sugestões de linha</button> */}
                 <button onClick={e => this.eraseBusMarkers()}  className="btn btn-secondary">Apagar marcações</button>
+                <button onClick={e => this.getLinesSugestions()}  className="btn btn-secondary ml-1">Sugestões de Linhas</button>
+                { this.state.lineSugestions != "" ?
+                <React.Fragment>
+                  <label className="d-flex justify-content-center" onClick={e => this.closeSugestion()} >{this.state.lineSugestions}</label>
+                </React.Fragment> : null }
             </div>
           </div>
 
