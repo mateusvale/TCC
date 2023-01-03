@@ -32,6 +32,8 @@ const marketingUrl = 'http://localhost:3001/marketing'
 // const busUrl = 'https://jeap.rio.rj.gov.br/dadosAbertosAPI/v2/transporte/veiculos'
 const busUrl = 'http://localhost:3333/onibus'
 
+const apiUrl = "http://localhost:8080/upload"
+
 const initialState = {
   centerLocation: { lat: -22.940581374458727, lng: -43.34338301801839 },
   circleLocation: {},
@@ -44,7 +46,10 @@ const initialState = {
   selectValueBus: "noValue",
   markersPlaceList: [],
   markersBusList: [],
-  lineSugestions: ""
+  lineSugestions: "",
+  selectedFile: null,
+  imageUrl: "",
+  loading: false
 }
 
 class Map extends Component {
@@ -286,23 +291,58 @@ class Map extends Component {
   }
   
   sendMarketing(id){
+    this.setState({loading: true})
     const marketing = {
       bus_line: this.state.selectValueBus,
       radius: this.state.radiusCircle,
       lat: this.state.circleLocation.lat,
       lng: this.state.circleLocation.lng,
       user_id: id,
+      image_url: this.state.imageUrl
     }
     axios['post'](marketingUrl, marketing).then(() => {
       alert("Informações enviadas")
       this.resetMarketing()
     })
+    this.setState({loading: false})
+    this.setState({selectedFile: null})
+    this.setState({imageUrl: ""})
   }
 
   resetMarketing(){
     this.resetCircle()
     this.setState({ selectValueBus: initialState.selectValueBus })
   }
+
+  //#upload file to google drive
+  onFileChange = e => {
+		const file = {
+			preview: URL.createObjectURL(e.target.files[0]),
+			data: e.target.files[0],
+		};
+		this.setState({ selectedFile: file });
+	};
+	
+	onFileUpload = async () => {
+	
+    this.setState({loading: true})
+		const formData = new FormData();
+		formData.append(
+			"file",
+			this.state.selectedFile.data,
+		);
+
+		const response = await fetch("http://localhost:8080/upload", {
+			method: "POST",
+			body: formData,
+			});
+		const responseWithBody = await response.json();
+		// this.submitImage(responseWithBody.message)
+    this.setState({ imageUrl: responseWithBody.message })
+    this.setState({loading: false})
+		// console.log(responseWithBody.message)
+	};
+  //#upload file to google drive
 
   render() {
     return (
@@ -421,12 +461,25 @@ class Map extends Component {
               <label className="d-flex justify-content-center">Raio: {this.state.radiusCircle}m</label>
               <label className="d-flex justify-content-center">Latitude: {this.state.circleLocation.lat}</label>
               <label className="d-flex justify-content-center">Longetude: {this.state.circleLocation.lng}</label>
+              <label className="d-flex justify-content-center">URL da imagem: {this.state.imageUrl}</label>
               <div  className="d-flex justify-content-center">
-                <button className="btn btn-primary mr-2" onClick={e => this.verifyloggedUser()} >enviar</button>
+                <button className="btn btn-primary mr-2 ml-6" onClick={e => this.verifyloggedUser()} >enviar</button>
                 <button className="btn btn-secondary" onClick={e => this.resetMarketing()}>reset</button>
+                {/* <button className="btn btn-primary mr-2 ml-2" onClick={this.onFileUpload}>Upload</button>
+                <input type="file" name="file" onChange={this.onFileChange} /> */}
               </div>
+              
+              <div className="d-flex justify-content-center">
+                <div>
+                  <input type="file" name="file" onChange={this.onFileChange} />
+                  <button className="btn btn-primary mr-10" onClick={this.onFileUpload}>Upload</button>
+                </div>
+              </div>
+              { this.state.loading !== false ?
+                <span className="d-flex justify-content-center">Loading ...</span>
+                : null
+              }
             </React.Fragment> : null }
-          <GoogleDriveFileUploader/>
         </div>
       </Main>
     )
