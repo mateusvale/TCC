@@ -3,7 +3,8 @@ import { LogOutUserDB } from "../helpers/db_controller"
 
 const INICIAL_STATE = {
     id: -1,
-    email: "Login"
+    email: "Login",
+    imageUrl: ""
 }
 
 
@@ -17,6 +18,9 @@ function reducer(state = INICIAL_STATE, action){
     else if (action.type === 'LOGOUT_USER'){
         LogOutUserDB()
         return { ... state, id: INICIAL_STATE.id, email: INICIAL_STATE.email }
+    }
+    else if (action.type === "SUBMIT_IMAGE"){
+        return { ... state, imageUrl: action.url}
     }
     
     return state;
