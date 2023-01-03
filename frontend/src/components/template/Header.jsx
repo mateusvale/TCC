@@ -30,7 +30,6 @@ const Header = ({ login, dispatch}) => {
     let loggedUser;
     axios(baseUrl).then(resp => {
         loggedUser = {
-            // login_id: resp.data[0].login_id,
             login_id: resp.data[0].id,
             email: resp.data[0].email
         }

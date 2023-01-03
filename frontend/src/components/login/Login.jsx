@@ -5,12 +5,6 @@ import axios from 'axios';
 import { connect } from "react-redux";
 import { LogInUserDB } from "../../helpers/db_controller";
 
-// const headerProps = {
-//     icon: 'user-circle-o',
-//     title: 'Login',
-//     subtitle: 'Login na plataforma',
-//     login: authenticateUser
-// }
 
 const baseUrl = 'http://localhost:3001/users'
 // const baseUrl = 'https://json-server-heroku-tcc.herokuapp.com/users'
@@ -76,25 +70,15 @@ class Login extends Component {
     }
 
     loginUser(user){
-        // user.login = true
-        // console.log(user)
         this.AuthenticateLogin(user.id, user.email) //REDUX method
         LogInUserDB(user.id, user.email) 
         this.setState({ authenticateUser: user.email })
-        // console.log(this.state.authenticateUser)
-        // axios['put'](`${baseUrl}/${user.id}`, user) //acredito que esse cara esteja aqui pois antes eu colocava uma flag de logado ou deslogado
-        //     .then(resp => {
-        //         const list = this.getUpdatedList(resp.data);
-        //         this.setState({ user: initialState.user, list });
-        //     })
     }
 
     showForms(num) {
         this.form = [0, 0, 0];
         this.form[num] = 1;
         this.clear();
-        // const user = { ...this.state.user }
-        // this.setState({ user })
     }
 
     sendNewAccount() {
@@ -102,7 +86,6 @@ class Login extends Component {
         axios['post'](baseUrl, user)
             .then(resp => {
                 const list = this.getUpdatedList(resp.data);
-                // const list = this.getUpdatedList(user);
                 this.setState({ user: initialState.user, list });
             })
         alert('Usuário criado com sucesso!');
@@ -128,11 +111,9 @@ class Login extends Component {
     }
 
     getUpdatedList(user, add = true){
-        //remover o user da lista
         const list = this.state.list.filter(u => u.id !== user.id)
         //se for para acrescentar:
         if(add) 
-            //list.unshift(user)
             list.push(user)
         return list
     }

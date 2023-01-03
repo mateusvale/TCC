@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { GoogleMap, LoadScript, Marker, Autocomplete, Circle } from '@react-google-maps/api';
 import Main from "../template/Main";
-import GoogleDriveFileUploader from "../uploader/GoogleDriveFileUploader";
 import axios from 'axios';
 import { typeOfPlaces, busLines } from "../../assets/data/data";
 import { connect } from "react-redux";
@@ -19,19 +18,9 @@ const containerStyle = {
 
 const key = process.env.REACT_APP_API_KEY
 
-// const userUrl = 'http://localhost:3001/logged_user'
 const userUrl = 'http://localhost:3001/logged'
 const marketingUrl = 'http://localhost:3001/marketing'
-
-// const userUrl = 'https://json-server-heroku-tcc.herokuapp.com/logged_user'
-// const marketingUrl = 'https://json-server-heroku-tcc.herokuapp.com/marketing'
-
-
-//const busUrl = 'http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm'
-//const busUrl = 'https://jeap.rio.rj.gov.br/dadosAbertosAPI/v2/transporte/veiculos/onibus'
-// const busUrl = 'https://jeap.rio.rj.gov.br/dadosAbertosAPI/v2/transporte/veiculos'
 const busUrl = 'http://localhost:3333/onibus'
-
 const apiUrl = "http://localhost:8080/upload"
 
 const initialState = {
@@ -101,7 +90,6 @@ class Map extends Component {
   }
 
   onClick(event){
-    //console.log(this.state.map)
     if (this.enableCircleByClick){
       const circleLocation = {
         lat: event.latLng.lat(),
@@ -109,7 +97,6 @@ class Map extends Component {
       }
       this.enableCircleByClick = false 
       this.setState({ circleLocation, isCircleVisible: true, disableButtons: false })
-      // this.insertPlacesMarks()
     }
   }
 
@@ -165,10 +152,8 @@ class Map extends Component {
     let request = {
       location: this.state.circleLocation,
       radius: this.state.radiusCircle,
-      // type: ['transit_station'],
       type: [this.state.selectValuePlace],
     }
-    //console.log(request)
     const service = new google.maps.places.PlacesService(this.state.map);
     service.nearbySearch(request, this.callback);
   }
@@ -179,13 +164,11 @@ class Map extends Component {
     pagination.nextPage();  //will load 40 more results. Can be searched only 60 differents bus stations.
     if (status == google.maps.places.PlacesServiceStatus.OK) {
       for (let i = 0; i < results.length; i++) {
-  
         let info = {
           id: results[i].place_id,
           name: results[i].name,
           coordinates: {lat: results[i].geometry.location.lat(), lng: results[i].geometry.location.lng() }
         }
-
         list.push(info)
       }
     }
@@ -216,9 +199,7 @@ class Map extends Component {
 
   callBusApi(){
   const url = `${busUrl}/${this.state.selectValueBus}`
-  // const url = `${busUrl}/900`
     axios(url).then(resp => {
-      //console.log(resp.data)
       const markersBusList = this.getUpdatedMarkersBusList(resp.data)
       this.setState({ markersBusList })
     })
@@ -239,8 +220,6 @@ class Map extends Component {
   arePointsInTheCircle(checkPoint, centerPoint, m) { // credits to user:69083
     var km = m/1000;
     var ky = 40000 / 360;
-    // console.log(`checkpoint: {lat: ${checkPoint.lat}, lng: ${checkPoint.lng}}`)
-    // console.log(`centerPoint: {lat: ${centerPoint.lat}, lng: ${centerPoint.lng}}`)
     var kx = Math.cos(Math.PI * centerPoint.lat / 180.0) * ky;
     var dx = Math.abs(centerPoint.lng - checkPoint.lng) * kx;
     var dy = Math.abs(centerPoint.lat - checkPoint.lat) * ky;
@@ -279,10 +258,8 @@ class Map extends Component {
   verifyloggedUser(){
     let user = null
     axios(userUrl).then(resp => {
-      // user = resp.data.find(u => u.login_id != -1 )
       user = resp.data.find(u => u.id != -1 )
       if (user){
-        // console.log(user)
         this.sendMarketing(user.id)
         return
       }
@@ -337,10 +314,8 @@ class Map extends Component {
 			body: formData,
 			});
 		const responseWithBody = await response.json();
-		// this.submitImage(responseWithBody.message)
     this.setState({ imageUrl: responseWithBody.message })
     this.setState({loading: false})
-		// console.log(responseWithBody.message)
 	};
   //#upload file to google drive
 
@@ -348,7 +323,6 @@ class Map extends Component {
     return (
       <Main {...headerProps}>
         <div className="">
-          {/* <LoadScript googleMapsApiKey={ true } libraries={["places"]}> */}
           <LoadScript googleMapsApiKey={ key } libraries={["places"]}>
             <GoogleMap 
               onDragEnd={this.boundsCallBack}
@@ -465,8 +439,6 @@ class Map extends Component {
               <div  className="d-flex justify-content-center">
                 <button className="btn btn-primary mr-2 ml-6" onClick={e => this.verifyloggedUser()} >enviar</button>
                 <button className="btn btn-secondary" onClick={e => this.resetMarketing()}>reset</button>
-                {/* <button className="btn btn-primary mr-2 ml-2" onClick={this.onFileUpload}>Upload</button>
-                <input type="file" name="file" onChange={this.onFileChange} /> */}
               </div>
               
               <div className="d-flex justify-content-center">
