@@ -20,9 +20,13 @@ const containerStyle = {
 const key = process.env.REACT_APP_API_KEY
 
 // const userUrl = 'http://localhost:3001/logged_user'
-// const marketingUrl = 'http://localhost:3001/marketing'
-const userUrl = 'https://json-server-heroku-tcc.herokuapp.com/logged_user'
-const marketingUrl = 'https://json-server-heroku-tcc.herokuapp.com/marketing'
+const userUrl = 'http://localhost:3001/logged'
+const marketingUrl = 'http://localhost:3001/marketing'
+
+// const userUrl = 'https://json-server-heroku-tcc.herokuapp.com/logged_user'
+// const marketingUrl = 'https://json-server-heroku-tcc.herokuapp.com/marketing'
+
+
 //const busUrl = 'http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm'
 //const busUrl = 'https://jeap.rio.rj.gov.br/dadosAbertosAPI/v2/transporte/veiculos/onibus'
 // const busUrl = 'https://jeap.rio.rj.gov.br/dadosAbertosAPI/v2/transporte/veiculos'
@@ -270,10 +274,11 @@ class Map extends Component {
   verifyloggedUser(){
     let user = null
     axios(userUrl).then(resp => {
-      user = resp.data.find(u => u.login_id != -1 )
+      // user = resp.data.find(u => u.login_id != -1 )
+      user = resp.data.find(u => u.id != -1 )
       if (user){
-        console.log(user.login_id)
-        this.sendMarketing(user.login_id)
+        // console.log(user)
+        this.sendMarketing(user.id)
         return
       }
       alert("Nenhum usuário logado!")
@@ -282,13 +287,11 @@ class Map extends Component {
   
   sendMarketing(id){
     const marketing = {
-      busLine: this.state.selectValueBus,
+      bus_line: this.state.selectValueBus,
       radius: this.state.radiusCircle,
-      coordinates: {
-        lat: this.state.circleLocation.lat,
-        lng: this.state.circleLocation.lng
-      },
-      userId: id,
+      lat: this.state.circleLocation.lat,
+      lng: this.state.circleLocation.lng,
+      user_id: id,
     }
     axios['post'](marketingUrl, marketing).then(() => {
       alert("Informações enviadas")

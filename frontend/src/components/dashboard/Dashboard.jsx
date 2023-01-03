@@ -9,12 +9,12 @@ const headerProps = {
     subtitle: 'Gerencie todas as propagandas que possui.'
 }
 
-// const userUrl = 'http://localhost:3001/users'
 // const userUrl = 'http://localhost:3001/logged_user'
-const userUrl = 'https://json-server-heroku-tcc.herokuapp.com/logged_user'
+const userUrl = 'http://localhost:3001/logged'
+// const userUrl = 'https://json-server-heroku-tcc.herokuapp.com/logged_user'
 
-// const marketingUrl = 'http://localhost:3001/marketing'
-const marketingUrl = 'https://json-server-heroku-tcc.herokuapp.com/marketing'
+const marketingUrl = 'http://localhost:3001/marketing'
+// const marketingUrl = 'https://json-server-heroku-tcc.herokuapp.com/marketing'
 
 const initialState = {
     list: []
@@ -42,10 +42,10 @@ class Dashboard extends Component {
         let user = null
         axios(userUrl).then(resp => {
         //   user = resp.data.find(u => u.login == true)
-          user = resp.data.find( u => u.login_id != -1 )
+          user = resp.data.find( u => u.id != -1 )
           if (user){
             // this.verifyMarketing(user.id)
-            this.verifyMarketing(user.login_id)
+            this.verifyMarketing(user.id)
             return
           }
           alert("Nenhum usuário logado!")
@@ -54,7 +54,7 @@ class Dashboard extends Component {
 
     verifyMarketing(id){
         axios(marketingUrl).then(resp => {
-            const list = resp.data.filter(u => u.userId === id)
+            const list = resp.data.filter(u => u.user_id === id)
             this.setState({list})
         })
     }
@@ -97,10 +97,10 @@ class Dashboard extends Component {
                             return ( 
                                 <tr key={index}>
                                     <th scope="row">{index + 1}</th>
-                                    <td>{marketing.busLine}</td>
+                                    <td>{marketing.bus_line}</td>
                                     <td>{marketing.radius}</td>
-                                    <td>{marketing.coordinates.lat}</td>
-                                    <td>{marketing.coordinates.lng}</td>
+                                    <td>{marketing.lat}</td>
+                                    <td>{marketing.lng}</td>
                                     <td><button onClick={e => this.delete(index)} >Deletar</button></td>
                                 </tr>
                             )

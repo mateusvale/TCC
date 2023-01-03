@@ -5,6 +5,11 @@ import { useEffect } from 'react';
 import { connect } from "react-redux";
 import axios from 'axios';
 
+// const baseUrl = 'http://localhost:3001/logged_user'
+const baseUrl = 'http://localhost:3001/logged'
+
+// const baseUrl = 'https://json-server-heroku-tcc.herokuapp.com/logged_user'
+
 function logout(){
     return {
         type: 'LOGOUT_USER'
@@ -18,9 +23,6 @@ function AuthenticateLogin(id, email) {
     }
 }
 
-// const baseUrl = 'http://localhost:3001/logged_user'
-const baseUrl = 'https://json-server-heroku-tcc.herokuapp.com/logged_user'
-
 const Header = ({ login, dispatch}) => {
     
     useEffect(() => {
@@ -28,7 +30,8 @@ const Header = ({ login, dispatch}) => {
     let loggedUser;
     axios(baseUrl).then(resp => {
         loggedUser = {
-            login_id: resp.data[0].login_id,
+            // login_id: resp.data[0].login_id,
+            login_id: resp.data[0].id,
             email: resp.data[0].email
         }
         if (loggedUser.login_id != -1){

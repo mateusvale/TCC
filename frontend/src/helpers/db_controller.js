@@ -6,16 +6,21 @@ const INICIAL_STATE = {
 }
 
 // const baseUrl = 'http://localhost:3001/logged_user'
-const baseUrl = 'https://json-server-heroku-tcc.herokuapp.com/logged_user'
+const baseUrl = 'http://localhost:3001/logged'
+const logoutUrl = 'http://localhost:3001/logout'
+const logintUrl = 'http://localhost:3001/login'
+// const baseUrl = 'https://json-server-heroku-tcc.herokuapp.com/logged_user'
 
-export const LogOutUserDB = () => axios['put'](`${baseUrl}/1`, INICIAL_STATE);
+// export const LogOutUserDB = () => axios['put'](`${baseUrl}/1`, INICIAL_STATE);
+export const LogOutUserDB = () =>  axios['put'](`${logoutUrl}`);
 
 export const LogInUserDB = (id, emailUser) => {
     const user = {
         login_id: id,
         email: emailUser
     }
-    axios['put'](`${baseUrl}/1`, user);
+    // axios['put'](`${baseUrl}/1`, user);
+    axios['put'](`${logintUrl}/${id}`);
 }
 
 // export const LoggedUserDB = () => {

@@ -7,13 +7,14 @@ function GoogleDriveFileUploader() {
     e.preventDefault();
     let formData = new FormData();
     formData.append("file", file.data);
-    const response = await fetch("http://localhost:3001/upload-to-google-drive", {
+    const response = await fetch("http://localhost:8080/upload", {
       method: "POST",
       body: formData,
     });
 
     const responseWithBody = await response.json();
-    if (response) setUrl(responseWithBody.publicUrl);
+    console.log(responseWithBody)
+    // if (response) setUrl(responseWithBody.publicUrl);
   };
 
   const handleFileChange = (e) => {
