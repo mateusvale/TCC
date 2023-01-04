@@ -245,6 +245,7 @@ class Map extends Component {
           }
         })
         let textSugestion = '';
+        sugestionLines.sort()
         sugestionLines.forEach(element => {
           textSugestion += `${element} - `
         });
@@ -422,7 +423,6 @@ class Map extends Component {
                   })}
                 </select>
                 <button onClick={e => this.callBusApi()} className="ml-1 mr-1 btn btn-primary">Inserir ônibus no mapa</button>
-                {/* <button onClick={e => this.erasePlacesMarkers()}  className="btn btn-secondary mr-1">Sugestões de linha</button> */}
                 <button onClick={e => this.eraseBusMarkers()}  className="btn btn-secondary">Apagar marcações</button>
                 <button onClick={e => this.getLinesSugestions()}  className="btn btn-secondary ml-1">Sugestões de Linhas</button>
                 { this.state.lineSugestions != "" ?

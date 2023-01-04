@@ -12,7 +12,6 @@ const baseUrl = 'https://db-postgress-tcc.herokuapp.com/logged'
 const logoutUrl = 'https://db-postgress-tcc.herokuapp.com/logout'
 const logintUrl = 'https://db-postgress-tcc.herokuapp.com/login'
 
-// export const LogOutUserDB = () => axios['put'](`${baseUrl}/1`, INICIAL_STATE);
 export const LogOutUserDB = () =>  axios['put'](`${logoutUrl}`);
 
 export const LogInUserDB = (id, emailUser) => {
@@ -20,26 +19,8 @@ export const LogInUserDB = (id, emailUser) => {
         login_id: id,
         email: emailUser
     }
-    // axios['put'](`${baseUrl}/1`, user);
     axios['put'](`${logintUrl}/${id}`);
 }
-
-// export const LoggedUserDB = () => {
-//     // let user;
-//     axios(baseUrl).then(resp => {
-//         // console.log(resp.data)
-//         return resp.data
-//     })
-//     // return user
-// }  
-
-// export const LoggedUserDB = () => {
-//     let user;
-//     user = axios(baseUrl).then(resp => {
-//         user = resp.data
-//     })
-//     return user
-// }
 
 export async function LoggedUserDB() {
     const axios = require('axios').default;
