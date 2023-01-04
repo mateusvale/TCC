@@ -5,11 +5,12 @@ const INICIAL_STATE = {
     email: "Login"
 }
 
-// const baseUrl = 'http://localhost:3001/logged_user'
-const baseUrl = 'http://localhost:3001/logged'
-const logoutUrl = 'http://localhost:3001/logout'
-const logintUrl = 'http://localhost:3001/login'
-// const baseUrl = 'https://json-server-heroku-tcc.herokuapp.com/logged_user'
+// const baseUrl = 'http://localhost:3001/logged'
+// const logoutUrl = 'http://localhost:3001/logout'
+// const logintUrl = 'http://localhost:3001/login'
+const baseUrl = 'https://db-postgress-tcc.herokuapp.com/logged'
+const logoutUrl = 'https://db-postgress-tcc.herokuapp.com/logout'
+const logintUrl = 'https://db-postgress-tcc.herokuapp.com/login'
 
 // export const LogOutUserDB = () => axios['put'](`${baseUrl}/1`, INICIAL_STATE);
 export const LogOutUserDB = () =>  axios['put'](`${logoutUrl}`);

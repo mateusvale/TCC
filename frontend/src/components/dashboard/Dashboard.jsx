@@ -9,12 +9,11 @@ const headerProps = {
     subtitle: 'Gerencie todas as propagandas que possui.'
 }
 
-// const userUrl = 'http://localhost:3001/logged_user'
-const userUrl = 'http://localhost:3001/logged'
-// const userUrl = 'https://json-server-heroku-tcc.herokuapp.com/logged_user'
+// const userUrl = 'http://localhost:3001/logged'
+const userUrl = 'https://db-postgress-tcc.herokuapp.com/logged'
 
-const marketingUrl = 'http://localhost:3001/marketing'
-// const marketingUrl = 'https://json-server-heroku-tcc.herokuapp.com/marketing'
+// const marketingUrl = 'http://localhost:3001/marketing'
+const marketingUrl = 'https://db-postgress-tcc.herokuapp.com/marketing'
 
 const initialState = {
     list: []

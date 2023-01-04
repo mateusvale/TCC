@@ -18,9 +18,12 @@ const containerStyle = {
 
 const key = process.env.REACT_APP_API_KEY
 
-const userUrl = 'http://localhost:3001/logged'
-const marketingUrl = 'http://localhost:3001/marketing'
-const busUrl = 'http://localhost:3333/onibus'
+// const userUrl = 'http://localhost:3001/logged'
+// const marketingUrl = 'http://localhost:3001/marketing'
+// const busUrl = 'http://localhost:3333/onibus'
+const userUrl = 'https://db-postgress-tcc.herokuapp.com/logged'
+const marketingUrl = 'https://db-postgress-tcc.herokuapp.com/marketing'
+const busUrl = 'https://db-postgress-tcc.herokuapp.com/onibus'
 const apiUrl = "http://localhost:8080/upload"
 
 const initialState = {

@@ -8,7 +8,8 @@ const headerProps = {
     subtitle: 'Cadastro de usuários: Incluir, Listar, Alterar e Excluir'
 }
 
-const baseUrl = 'http://localhost:3001/users'
+// const baseUrl = 'http://localhost:3001/users'
+const baseUrl = 'https://db-postgress-tcc.herokuapp.com/users'
 const initialState = {
     user: { name: '', email: '' },
     list: []

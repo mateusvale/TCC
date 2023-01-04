@@ -5,10 +5,8 @@ import { useEffect } from 'react';
 import { connect } from "react-redux";
 import axios from 'axios';
 
-// const baseUrl = 'http://localhost:3001/logged_user'
-const baseUrl = 'http://localhost:3001/logged'
-
-// const baseUrl = 'https://json-server-heroku-tcc.herokuapp.com/logged_user'
+// const baseUrl = 'http://localhost:3001/logged'
+const baseUrl = 'https://db-postgress-tcc.herokuapp.com/logged'
 
 function logout(){
     return {
