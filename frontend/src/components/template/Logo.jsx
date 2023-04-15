@@ -1,6 +1,6 @@
 import './Logo.css'
 import React from 'react'
-import logo from '../../assets/imgs/ump.png'
+import logo from '../../assets/imgs/uerj.png'
 import { Link } from 'react-router-dom'
 
 export default props => 
