@@ -124,7 +124,7 @@ class Map extends Component {
   enableAutocompleteForCircle() {
     this.enableCircleByClick = false
     const circleLocation = this.state.centerLocation
-    this.setState({ isCircleVisible: true, circleLocation, disableButtons: true })
+    this.setState({ isCircleVisible: true, circleLocation})
   }
 
   resetCircle(){
@@ -353,7 +353,7 @@ class Map extends Component {
                   onPlaceChanged={this.onPlaceChanged}>
                   <input
                     type="text"
-                    placeholder="Customized your placeholder"
+                    placeholder="Pesquise no Google Maps"
                     style={{
                       boxSizing: `border-box`,
                       border: `1px solid transparent`,
